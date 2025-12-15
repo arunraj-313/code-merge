@@ -1,0 +1,213 @@
+@{
+    string currentController = ViewContext.RouteData.Values["Controller"].ToString().ToLower();
+    string userRole = Session["Role"] as string;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Stay-Ease</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        :root {
+            --royal-1: #071028;
+            --royal-2: #0b1c3f;
+            --gold-1: #cfa23a;
+            --gold-2: #f5d26a;
+            --text: #ffffff;
+        }
+
+        body {
+            padding-top: 90px;
+            background: #0b0d0f;
+            color: white;
+        }
+
+        /* NAVBAR */
+        .navbar-custom {
+            padding: 17px;
+            background: linear-gradient(135deg, var(--royal-1), var(--royal-2));
+            border-bottom: 1px solid rgba(207,162,58,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .navbar-brand {
+            color: var(--gold-2) !important;
+            font-weight: 800;
+            font-size: 1.8rem;
+        }
+
+        .navbar-nav > li > a {
+            color: var(--gold-1) !important;
+            font-weight: 600;
+        }
+
+        .navbar-nav > li > a:hover {
+            color: var(--gold-2) !important;
+        }
+
+        /* BUTTONS */
+        .login-btn {
+            background: var(--gold-1);
+            color: #071028;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 700;
+            border: none;
+        }
+
+        .logout-btn {
+            background: transparent;
+            color: red;
+            padding: 10px 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            font-weight: 700;
+        }
+
+        .welcome-text {
+            color: var(--gold-2);
+            margin-right: 10px;
+            font-weight: 600;
+        }
+
+        /* LOGIN POPUP */
+        #loginModal .modal-content {
+            background: #0c1733;
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(245,210,106,0.4);
+            color: white;
+        }
+
+        .popup-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .popup-btn {
+            width: 100%;
+            background: #f5d26a;
+            color: #071028;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
+        footer { display:none; }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar navbar-inverse navbar-fixed-top navbar-custom">
+        <div class="container">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                @Html.ActionLink("Stay-Ease", "Index", "Home", null, new { @class = "navbar-brand" })
+            </div>
+
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+
+                    @* ADMIN DASHBOARD *@
+                    @if (userRole == "Admin")
+                    {
+                        <li>@Html.ActionLink("Admin Dashboard", "Dashboard", "Admin")</li>
+                    }
+
+                    @* USER DASHBOARD (from 2nd layout) *@
+                    @if (Session["FullName"] != null && userRole != "Admin")
+                    {
+                        <li>@Html.ActionLink("Dashboard", "Index", "UserDashboard")</li>
+                    }
+                </ul>
+
+                <div class="navbar-right header-buttons">
+
+                    @if (Session["FullName"] != null)
+                    {
+                        <span class="welcome-text">Welcome, @Session["FullName"]</span>
+                        <button class="logout-btn"
+                                onclick="window.location.href='@Url.Action("Logout","Account")'">
+                            Logout
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="login-btn" data-toggle="modal" data-target="#loginModal">
+                            Login
+                        </button>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE CONTENT -->
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <h3 class="text-center" style="color:#f5d26a;">Login</h3>
+
+                <form id="ajaxLoginForm">
+                    <input type="text" name="email" class="popup-input" placeholder="Email" />
+                    <input type="password" name="password" class="popup-input" placeholder="Password" />
+                    <span id="loginError" class="text-danger"></span>
+
+                    <button type="submit" class="popup-btn">Login</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script>
+        $("#ajaxLoginForm").submit(function (e) {
+            e.preventDefault();
+
+            $.post("/Account/AjaxLogin", $(this).serialize(), function (res) {
+                if (!res.success) {
+                    $("#loginError").text(res.message);
+                    return;
+                }
+                window.location.href = res.redirect;
+            });
+        });
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>
