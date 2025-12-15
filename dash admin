@@ -75,3 +75,84 @@
         }
     </tbody>
 </table>
+
+
+
+
+
+public ActionResult Verify(int id)
+{
+    using (SqlConnection con = new SqlConnection(connString))
+    {
+        con.Open();
+
+        // Get admin email
+        SqlCommand cmd = new SqlCommand(
+            "SELECT FullName, Email FROM PendingAdminRequests WHERE RequestID=@ID",
+            con);
+        cmd.Parameters.AddWithValue("@ID", id);
+
+        SqlDataReader dr = cmd.ExecuteReader();
+        if (!dr.Read())
+        {
+            TempData["error"] = "Request not found!";
+            return RedirectToAction("Dashboard");
+        }
+
+        string fullName = dr["FullName"].ToString();
+        string email = dr["Email"].ToString();
+        dr.Close();
+
+        // Update status to VERIFIED
+        SqlCommand updateCmd = new SqlCommand(
+            "UPDATE PendingAdminRequests SET Status='Verified', VerifiedOn=GETDATE() WHERE RequestID=@ID",
+            con);
+        updateCmd.Parameters.AddWithValue("@ID", id);
+        updateCmd.ExecuteNonQuery();
+
+        // Send verification email
+        SendVerificationEmail(email, fullName);
+
+        TempData["success"] = "Admin request verified. Email sent.";
+    }
+
+    return RedirectToAction("Dashboard");
+}
+
+
+
+
+private void SendVerificationEmail(string email, string fullName)
+{
+    try
+    {
+        MailMessage mail = new MailMessage();
+        mail.To.Add(email);
+        mail.From = new MailAddress("stayeasepgbooking@gmail.com");
+        mail.Subject = "StayEase Admin Verification";
+
+        mail.Body =
+$@"Hello {fullName},
+
+Your admin request has been verified.
+
+Please submit the following to proceed:
+• PG details
+• ID proof
+• Property documents
+
+After verification, your account will be approved.
+
+Thank you,
+StayEase Team";
+
+        SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+        smtp.EnableSsl = true;
+        smtp.Credentials = new NetworkCredential(
+            "stayeasepgbooking@gmail.com",
+            "fstz tzcr yxbj bkbx");
+
+        smtp.Send(mail);
+    }
+    catch { }
+}
