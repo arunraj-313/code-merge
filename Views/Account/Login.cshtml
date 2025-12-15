@@ -1,0 +1,152 @@
+﻿@*@{
+        ViewBag.Title = "Login";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    <style>
+
+
+        /* PAGE BACKGROUND */
+        body {
+            background: linear-gradient(135deg, #071028, #0b1c3f);
+            color: white;
+        }
+
+        /* CENTER THE PAGE CONTENT */
+        .page-center {
+            min-height: 85vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* LOGIN CARD */
+        .login-card {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+            width: 400px;
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+
+            .login-card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 0 22px rgba(245, 210, 106, 0.35);
+                border-color: #f5d26a;
+            }
+
+        /* TITLE */
+        .login-title {
+            text-align: center;
+            color: #f5d26a;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        /* LABEL */
+        label {
+            color: #f5d26a;
+            font-weight: 500;
+        }
+
+        /* INPUT BOXES */
+        .form-control {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            border-radius: 10px;
+        }
+
+            .form-control:focus {
+                border-color: #f5d26a;
+                box-shadow: 0 0 8px rgba(245, 210, 106, 0.5);
+                background: rgba(255, 255, 255, 0.15);
+            }
+
+        /* LOGIN BUTTON (FIXED SPACING) */
+        .btn-login {
+            background: #f5d26a;
+            border: none;
+            color: #071028;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 20px; /* spaced properly */
+            transition: .25s ease;
+        }
+
+            .btn-login:hover {
+                background: #ffe8a4;
+                box-shadow: 0 0 12px rgba(245, 210, 106, 0.6);
+            }
+
+        /* LINK COLORS */
+        a {
+            color: #f5d26a; /* yellow */
+            text-decoration: none;
+        }
+
+            a:hover {
+                color: white; /* change to white */
+                text-decoration: underline;
+            }
+
+        /* REMOVE TOP RIGHT LOGIN BUTTON ON THIS PAGE */
+        .login-btn {
+            display: none !important;
+        }
+    </style>
+
+    <div class="page-center">
+        <div class="login-card">
+            <h2 class="login-title">Login to StayEase</h2>
+            <!-- Success & Error Alerts -->
+            @if (TempData["success"] != null)
+            {
+                <div class="alert alert-success">@TempData["success"]</div>
+            }
+            @if (TempData["error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["error"]</div>
+            }
+            <!-- LOGIN FORM -->
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+            {
+                <div class="mb-3">
+                    <label>Email or Username</label>
+                    @Html.TextBox("email", null, new {
+                        @class = "form-control",
+                        required = "required",
+                        placeholder = "Enter your email"
+                    })
+                </div>
+
+                <div class="mb-3">
+                    <label>Password</label>
+                    @Html.Password("password", null, new {
+                        @class = "form-control",
+                        required = "required",
+                        placeholder = "Enter your password"
+                    })
+                </div>
+
+                <button type="submit" class="btn-login w-100">Login</button>
+
+                <div class="text-center mt-3">
+                    <a href="/Account/ForgotPassword">Forgot Password?</a>
+                </div>
+
+                <div class="text-center mt-2">
+                    <a href="/Account/Register">New User? Register Here</a>
+                </div>
+            }*@
+
+
+
+
+
+@{
+    Response.Redirect("/Home/Index?openLogin=true");
+}

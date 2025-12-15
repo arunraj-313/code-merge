@@ -1,0 +1,195 @@
+﻿@model StayEasePG.Models.PG
+@{
+    ViewBag.Title = "Edit PG";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Ensure this uses your themed layout
+}
+<style>
+
+    /* -------------------------------------------------------------------------- */
+    /* THEME VARIABLES (Consistent with previous pages)                             */
+    /* -------------------------------------------------------------------------- */
+    :root {
+        --bg: #0f1215; /* page bg (very dark) */
+        --panel: #1d2227; /* Form card background */
+        --text: #e9eef2; /* main text */
+        --sub: #a9b0b6; /* muted text */
+        --accent: #ffce4c; /* Primary Gold Accent */
+        --accent2: #c9a34f;
+        --border-color: rgba(255, 206, 76, 0.1);
+        --input-bg: #0f1215; /* Input field background */
+        --primary-btn-bg: #ffce4c; /* Gold for Update button */
+        --radius: 8px;
+        font-family: 'Inter', sans-serif;
+    }
+    /* Form Container and Page Header */
+    .form-container {
+        max-width: 650px; /* Constrain the form width for focus */
+        margin: 30px auto;
+        padding: 30px;
+        background: linear-gradient(180deg, var(--panel), #17191b);
+        border-radius: var(--radius);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    h2 {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--accent);
+        margin-top: 0;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+    /* Form Elements */
+    form label {
+        color: var(--text);
+        font-size: 14px; /* Text size standard */
+        margin-top: 15px;
+        margin-bottom: 6px;
+        display: block;
+        font-weight: 600;
+    }
+    /* Input, Select, Textarea common styling */
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        background: var(--input-bg);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text);
+        border-radius: 8px;
+        font-size: 14px; /* Text size standard */
+        box-sizing: border-box;
+        transition: border-color 0.2s;
+        min-height: 40px;
+    }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 206, 76, 0.2);
+        }
+    /* Dropdown Specifics */
+    select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a9b0b6'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding-right: 30px;
+    }
+
+    .form-control option {
+        background-color: var(--input-bg);
+        color: var(--text);
+    }
+    /* Textarea Styling */
+    textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+    }
+    /* Horizontal Layout for fields */
+    .form-row {
+        display: flex;
+        gap: 20px;
+    }
+
+    .form-group {
+        flex: 1;
+    }
+    /* Submit Button (Primary Gold) */
+    .btn-primary {
+        display: block;
+        width: 150px;
+        padding: 12px;
+        margin-top: 25px;
+        border: none;
+        border-radius: 999px;
+        background: linear-gradient(180deg, var(--accent), var(--accent2));
+        color: var(--bg); /* Dark text on bright button */
+        font-weight: 700;
+        font-size: 15px;
+        cursor: pointer;
+        transition: background-color 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 10px rgba(255, 206, 76, 0.3);
+    }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            box-shadow: 0 6px 12px rgba(255, 206, 76, 0.5);
+        }
+</style>
+<div class="form-container">
+    <h2>Edit PG</h2>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.PGID)
+        <label for="PGName">PG Name</label>
+        @Html.TextBoxFor(m => m.PGName, new { @class = "form-control", required = "required", placeholder = "Example: Royal Gents PG" })
+        @Html.ValidationMessageFor(m => m.PGName, "", new { @class = "text-danger" })
+        <label for="Email">Email (Must match Admin Email)</label>
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email", required = "required", placeholder = "admin@example.com" })
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+        <div class="form-row">
+            <div class="form-group">
+                <label for="PGType">PG Type</label>
+                @Html.DropDownListFor(m => m.PGType,
+                    new List<SelectListItem>
+                    {
+                        new SelectListItem { Text = "Gents PG", Value = "Gents PG" },
+                        new SelectListItem { Text = "Women's PG", Value = "Women's PG" },
+                        new SelectListItem { Text = "Coliving PG", Value = "Coliving PG" }
+                    },
+                    "Select PG Type",
+                    new { @class = "form-control", required = "required" }
+                )
+                @Html.ValidationMessageFor(m => m.PGType, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label for="PGCategory">Category</label>
+                @Html.DropDownListFor(m => m.PGCategory,
+                    new List<SelectListItem>
+                    {
+                        new SelectListItem { Text = "Single Sharing", Value = "Single Sharing" },
+                        new SelectListItem { Text = "Double Sharing", Value = "Double Sharing" },
+                        new SelectListItem { Text = "Three Sharing", Value = "Three Sharing" },
+                        new SelectListItem { Text = "Four Sharing", Value = "Four Sharing" }
+                    },
+                    "Select Category",
+                    new { @class = "form-control", required = "required" }
+                )
+                @Html.ValidationMessageFor(m => m.PGCategory, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <label for="Description">Description</label>
+        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 4, required = "required", placeholder = "A brief description of the PG and its main features..." })
+        @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+        <label for="Address">Address</label>
+        @Html.TextBoxFor(m => m.Address, new { @class = "form-control", required = "required", placeholder = "Street address and locality" })
+        @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+        <div class="form-row">
+            <div class="form-group">
+                <label for="City">City</label>
+                @Html.TextBoxFor(m => m.City, new { @class = "form-control", required = "required", placeholder = "Example: Bangalore" })
+                @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label for="State">State</label>
+                @Html.TextBoxFor(m => m.State, new { @class = "form-control", required = "required", placeholder = "Example: Karnataka" })
+                @Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="PinCode">Pincode</label>
+                @Html.TextBoxFor(m => m.PinCode, new { @class = "form-control", required = "required", type = "number", placeholder = "560068" })
+                @Html.ValidationMessageFor(m => m.PinCode, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label for="Landmark">Landmark</label>
+                @Html.TextBoxFor(m => m.Landmark, new { @class = "form-control", placeholder = "Near metro station or hospital" })
+                @Html.ValidationMessageFor(m => m.Landmark, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    }
+</div>

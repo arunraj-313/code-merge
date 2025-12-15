@@ -1,0 +1,16 @@
+﻿@model List<StayEasePG.Models.PGListingViewModel>
+<h2>PG Listings</h2>
+<div class="pg-list">
+    @foreach (var pg in Model)
+    {
+        <div class="pg-card">
+            <h3>@pg.PGName</h3>
+            <p><b>@pg.PGType</b></p>
+            <p>Category: @pg.Category</p>
+            <p>City: @pg.City</p>
+            <p>Landmark: @pg.Landmark</p>
+            <a href="@Url.Action("Details", "UserPG", new { id = pg.PGID })"
+               class="btn btn-primary">View Details</a>
+        </div>
+    }
+</div>

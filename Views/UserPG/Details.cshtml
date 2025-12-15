@@ -1,0 +1,46 @@
+﻿@model StayEasePG.Models.PGDetailsViewModel
+<h2>@Model.PGName</h2>
+<p>@Model.Description</p>
+<p><b>Address:</b> @Model.Address</p>
+<h3>Room Details</h3>
+<table class="table">
+    <tr>
+        <th>Room Type</th>
+        <th>Available</th>
+        <th>Price/Day</th>
+        <th>Price/Week</th>
+        <th>Price/Month</th>
+        <th></th>
+    </tr>
+    @foreach (var r in Model.Rooms)
+    {
+        <tr>
+            <td>@r.RoomType</td>
+            <td>@r.AvailableRooms</td>
+            <td>@r.PricePerDay</td>
+            <td>@r.PricePerWeek</td>
+            <td>@r.PricePerMonth</td>
+            <td>
+                <a href="@Url.Action("Book", "UserPG",
+                    new { pgid = Model.PGID, roomid = r.RoomID })"
+                   class="btn btn-success">Book</a>
+            </td>
+        </tr>
+    }
+</table>
+<h3>Amenities</h3>
+<ul>
+    @foreach (var a in Model.Amenities)
+    {
+        <li>@a</li>
+    }
+</ul>
+<h3>PG Rules</h3>
+<table class="table">
+    <tr><td>Check-In</td><td>@Model.Rules.CheckInTime</td></tr>
+    <tr><td>Check-Out</td><td>@Model.Rules.CheckOutTime</td></tr>
+    <tr><td>Restrictions</td><td>@Model.Rules.Restrictions</td></tr>
+    <tr><td>Visitors Allowed</td><td>@Model.Rules.VisitorsAllowed</td></tr>
+    <tr><td>Gate Close</td><td>@Model.Rules.GateCloseTime</td></tr>
+    <tr><td>Notice Period</td><td>@Model.Rules.NoticePeriod</td></tr>
+</table>

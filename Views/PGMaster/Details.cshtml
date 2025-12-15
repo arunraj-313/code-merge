@@ -1,0 +1,368 @@
+﻿@model StayEasePG.Models.PGModel
+@{
+    ViewBag.Title = "PG Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+    /* -------------------------------------------------------------------------- */
+    /* THEME & BASE STYLES                                                        */
+    /* -------------------------------------------------------------------------- */
+    :root {
+        --color-dark-bg: #171a21;
+        --color-card-bg: #1f242d;
+        --color-accent-yellow: #ffce4c;
+        --color-text-light: #ffffff;
+        --color-text-muted: #9fa6b3;
+        --color-border: #3d4554;
+        --color-success: #34d399; /* Green for Available */
+        --color-danger: #ef4444; /* Red for Full/Error */
+    }
+
+    body {
+        background-color: var(--color-dark-bg) !important;
+        color: var(--color-text-light);
+    }
+
+    .pg-details-wrapper {
+        padding: 20px;
+        padding-top: 40px;
+    }
+    /* Page Title and Back Button Alignment */
+    .title-and-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    h2 {
+        font-weight: 700;
+        color: var(--color-accent-yellow);
+        margin: 0;
+    }
+
+    h3, h4 {
+        color: var(--color-accent-yellow);
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+
+    p {
+        color: var(--color-text-light);
+    }
+    /* -------------------------------------------------------------------------- */
+    /* MAIN FLEX CONTAINER STYLING                                                */
+    /* -------------------------------------------------------------------------- */
+    .details-container {
+        display: flex;
+        /* Using flex-start keeps the right column compact */
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    .details-section-box, .rules-section {
+        padding: 30px;
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        background-color: var(--color-card-bg);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        margin-bottom: 20px;
+    }
+    /* Left column is 2/3rds wide */
+    .left-column-content {
+        flex: 2;
+    }
+    /* Rules Section (Right column) is 1/3rd wide, but shrinks to fit content */
+    .rules-section {
+        flex: 1;
+        min-width: 300px; /* Ensure a minimum readable width */
+        max-width: 400px; /* Prevent it from getting too wide */
+    }
+    /* -------------------------------------------------------------------------- */
+    /* ROOM DETAILS TABLE (Fixing alignment with nowrap)                          */
+    /* -------------------------------------------------------------------------- */
+    .table {
+        width: 100%;
+        margin-top: 15px;
+        border-collapse: collapse;
+        table-layout: fixed; /* Ensures column widths are respected */
+    }
+
+        .table th {
+            background-color: #2c323c;
+            color: var(--color-accent-yellow);
+            font-weight: 700;
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 2px solid var(--color-accent-yellow);
+        }
+
+        .table td {
+            color: var(--color-text-light);
+            padding: 12px 15px;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--color-border);
+            /* FIX: Prevents text from wrapping to keep content on one line */
+            white-space: nowrap;
+        }
+            /* Adjust column widths for better fit */
+            .table th:nth-child(1), .table td:nth-child(1) {
+                width: 25%;
+            }
+            /* Room Type */
+            .table th:nth-child(2), .table td:nth-child(2) {
+                width: 15%;
+            }
+            /* Available Status */
+            .table th:nth-child(3), .table td:nth-child(3) {
+                width: 13%;
+            }
+            /* Price/Day */
+            .table th:nth-child(4), .table td:nth-child(4) {
+                width: 16%;
+            }
+            /* Price/Week */
+            .table th:nth-child(5), .table td:nth-child(5) {
+                width: 16%;
+            }
+            /* Price/Month */
+            .table th:nth-child(6), .table td:nth-child(6) {
+                width: 15%;
+            }
+    /* Book Button */
+
+    /* Availability Badges */
+    .availability-badge {
+        padding: 4px 8px; /* Slightly reduced padding */
+        border-radius: 20px;
+        color: var(--color-dark-bg);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+    }
+
+    .available {
+        background: var(--color-success);
+    }
+
+    .full {
+        background: var(--color-danger);
+    }
+    /* -------------------------------------------------------------------------- */
+    /* RULES TABLE (Ensuring content stays on one line)                           */
+    /* -------------------------------------------------------------------------- */
+    .rules-section .table {
+        margin-top: 15px;
+        border: none;
+        table-layout: auto; /* Allow columns to fit content */
+    }
+
+        .rules-section .table td {
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            color: var(--color-text-light);
+            /* Ensure rule values don't wrap */
+            white-space: nowrap;
+        }
+
+            .rules-section .table td:first-child {
+                color: var(--color-text-muted);
+                font-weight: 500 !important;
+            }
+
+            .rules-section .table td:last-child {
+                text-align: right !important;
+                font-weight: 600;
+            }
+    /* -------------------------------------------------------------------------- */
+    /* AMENITIES & BUTTONS (Rest of the previous styles)                          */
+    /* -------------------------------------------------------------------------- */
+    .amenities-list {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        padding: 0;
+        margin-top: 15px;
+        border-top: 1px solid var(--color-border);
+        padding-top: 15px;
+    }
+
+        .amenities-list li {
+            text-align: center;
+            margin-right: 25px;
+            margin-bottom: 15px;
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+        }
+
+            .amenities-list li span {
+                font-size: 30px;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+    .btn-secondary {
+        background-color: transparent !important;
+        border: 1px solid var(--color-border) !important;
+        color: var(--color-text-light) !important;
+        transition: background-color 0.2s, color 0.2s;
+        border-radius: 8px;
+        padding: 8px 15px;
+    }
+
+        .btn-secondary:hover {
+            background-color: #3d4554 !important;
+            color: var(--color-accent-yellow) !important;
+        }
+
+    .btn-primary {
+        background-color: var(--color-accent-yellow) !important;
+        border: 2px solid var(--color-accent-yellow) !important;
+        color: var(--color-dark-bg) !important;
+        border-radius: 8px;
+        padding: 5px 10px;
+        font-weight: 600;
+        transition: background-color 0.2s;
+    }
+
+        .btn-primary:hover {
+            background-color: #ffde78 !important;
+        }
+
+    .btn-danger {
+        background-color: var(--color-danger);
+        color: var(--color-text-light);
+        border: none;
+        border-radius: 8px;
+        padding: 5px 10px;
+        font-weight: 600;
+    }
+
+    .alert-danger {
+        background-color: #2c323c;
+        color: var(--color-danger);
+        border-color: var(--color-danger);
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+</style>
+<div class="pg-details-wrapper">
+    <div class="title-and-actions">
+        <h2>PG Details</h2>
+        <a href="@Url.Action("Index", "PGMaster")" class="btn btn-secondary">
+            ← Back
+        </a>
+    </div>
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+    <div class="details-container">
+        <div class="left-column-content details-section-box">
+            <h3>@Model.PGName</h3>
+            <p>@Model.Description</p>
+            <p><b>Address:</b> @Model.Address, @Model.City, @Model.State</p>
+            <h4>Amenities</h4>
+            <ul class="amenities-list">
+                @if (Model.Amenities != null && Model.Amenities.Any())
+                {
+                    foreach (var amenity in Model.Amenities)
+                    {
+                        <li>
+                            <span style="font-size: 24px;">✅</span><br />
+                            @amenity.AmenityName
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li>No amenities listed.</li>
+                }
+            </ul>
+            <h4>Room Details</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Room Type</th>
+                        <th>Available</th>
+                        <th>Price/Day</th>
+                        <th>Price/Week</th>
+                        <th>Price/Month</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model.Rooms)
+                    {
+                        <tr>
+                            <td>@r.RoomType</td>
+                            <td>
+                                @if (r.AvailableRooms > 0)
+                                {
+                                    <span class="availability-badge available">
+                                        @r.AvailableRooms Available
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="availability-badge full">
+                                        Full
+                                    </span>
+                                }
+                            </td>
+                            <td>₹ @r.PricePerDay.ToString("N0")</td>
+                            <td>₹ @r.PricePerWeek.ToString("N0")</td>
+                            <td>₹ @r.PricePerMonth.ToString("N0")</td>
+                            <td>
+                                @if (r.AvailableRooms > 0)
+                                {
+                                    <a href="/PGMaster/BookDuration?pgId=@Model.PGID&roomId=@r.RoomID"
+                                       class="btn btn-primary">
+                                        Book
+                                    </a>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-danger" disabled>Full</button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="rules-section">
+            <h3 style="margin-top: 0;">PG Rules</h3>
+            <table class="table">
+                <tr>
+                    <td>Check-In Time</td>
+                    <td>@Model.Rules.CheckInTime</td>
+                </tr>
+                <tr>
+                    <td>Check-Out Time</td>
+                    <td>@Model.Rules.CheckOutTime</td>
+                </tr>
+                <tr>
+                    <td>Restrictions</td>
+                    <td>@Model.Rules.Restrictions</td>
+                </tr>
+                <tr>
+                    <td>Visitors Allowed</td>
+                    <td>@(Model.Rules.VisitorsAllowed ? "Yes" : "No")</td>
+                </tr>
+                <tr>
+                    <td>Gate Closing Time</td>
+                    <td>@Model.Rules.GateClosingTime</td>
+                </tr>
+                <tr>
+                    <td>Notice Period</td>
+                    <td>@Model.Rules.NoticePeriod</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

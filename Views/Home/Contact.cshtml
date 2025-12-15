@@ -1,0 +1,269 @@
+﻿@{
+    ViewBag.Title = "Contact";
+    // Assuming the main Layout file is already defined elsewhere (e.g., _Layout.cshtml)
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Us - StayEase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+
+        /* -------------------------------------------------------------------------- */
+        /* THEME VARIABLES (Consistent with previous pages)                             */
+        /* -------------------------------------------------------------------------- */
+        :root {
+            --bg: #0f1215; /* page bg (very dark) */
+            --navbar-bg: #15191f; /* Navbar slightly lighter than page bg */
+            --text: #e9eef2; /* main text */
+            --sub: #a9b0b6; /* muted text */
+            --accent: #ffce4c; /* Primary Gold Accent */
+            --accent2: #c9a34f;
+            --border-color: rgba(255, 206, 76, 0.1);
+            --radius: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+        /* Base Layout Styling */
+        body {
+            background: linear-gradient(180deg, var(--bg), #0b0d0f 70%);
+            color: var(--text);
+            /* Prevent content from hiding behind the fixed navbar */
+            padding-top: 70px;
+            min-height: 100vh;
+        }
+
+
+        .container {
+            /* Standard container width */
+            width: 1100px;
+            max-width: calc(100% - 50px);
+            margin: 0 auto;
+        }
+        /* -------------------------------------------------------------------------- */
+        /* NAVBAR STYLING (Custom Dark/Gold Theme)                                    */
+        /* -------------------------------------------------------------------------- */
+        .title {
+            text-align: center;
+            font-size: 38px; /* Slightly larger title */
+            font-weight: 800;
+            color: var(--accent); /* Heading color is accent */
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--sub);
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        /* GRID */
+        .contact-grid {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+            /* Added min-height for structure */
+            min-height: 450px;
+        }
+        /* LEFT INFO */
+        .contact-info {
+            width: 36%;
+        }
+
+        .info-box {
+            /* Light panel background for info boxes */
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0.005));
+            padding: 22px; /* Increased padding */
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+        }
+
+        .icon {
+            font-size: 28px; /* Larger icons */
+            margin-bottom: 8px;
+            color: var(--accent);
+        }
+
+        .info-box h4 {
+            margin: 0 0 6px 0;
+            font-size: 19px;
+            font-weight: 700;
+        }
+
+        .info-box p {
+            margin: 0;
+            color: var(--sub);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        /* RIGHT FORM */
+        .contact-form {
+            width: 64%;
+            /* Darker panel background for the main form */
+            background: linear-gradient(180deg, var(--panel), #17191b);
+            padding: 30px; /* Increased padding */
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        form label {
+            font-size: 14px;
+            margin-bottom: 6px;
+            display: block;
+            font-weight: 600;
+        }
+
+        form input,
+        form select,
+        form textarea {
+            width: 100%;
+            /* Input color matches the page background for contrast */
+            background: var(--bg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            padding: 12px;
+            border-radius: 8px; /* Slightly smaller radius for inputs */
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+            form input:focus,
+            form select:focus,
+            form textarea:focus {
+                border-color: var(--accent);
+                outline: none;
+            }
+        /* Dropdown arrow styling (optional for dark mode) */
+        form select {
+            appearance: none; /* Remove default browser styling */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a9b0b6'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 30px;
+        }
+
+        form option {
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        textarea {
+            height: 110px;
+            resize: none;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 18px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+            .form-group.single {
+                margin-bottom: 16px;
+            }
+        /* BUTTON */
+        .btn-primary {
+            /* Use linear gradient for the gold button */
+            background: linear-gradient(180deg, var(--accent), var(--accent2));
+            padding: 12px 22px;
+            border: none;
+            border-radius: 999px;
+            font-weight: 700;
+            color: #000;
+            cursor: pointer;
+            margin-top: 15px; /* Increased margin */
+            font-size: 15px;
+            width: 200px;
+            box-shadow: 0 4px 12px rgba(255, 206, 76, 0.2);
+            transition: all 0.2s;
+        }
+
+            .btn-primary:hover {
+                opacity: 0.9;
+                box-shadow: 0 6px 15px rgba(255, 206, 76, 0.4);
+            }
+
+        .form-btn {
+            display: block;
+            margin-left: auto;
+        }
+    </style>
+</head>
+<body>
+    <section class="contact-section container">
+        <h2 class="title">Contact Us</h2>
+        <p class="subtitle">Reach out for PG booking, complaints, or any assistance. We're here to help!</p>
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="info-box">
+                    <div class="icon">📍</div>
+                    <h4>Address</h4>
+                    <p>
+                        Kudlu Gate, Hosapalya / Muneshwara Nagar<br>
+                        Bengaluru South, Bangalore Urban District<br>
+                        Karnataka – 560068, India
+                    </p>
+                </div>
+                <div class="info-box">
+                    <div class="icon">📞</div>
+                    <h4>Phone</h4>
+                    <p>+91 8220383177</p>
+                    <p class="text-muted">(Mon-Sat: 9:00 AM - 6:00 PM IST)</p>
+                </div>
+                <div class="info-box">
+                    <div class="icon">✉️</div>
+                    <h4>Email</h4>
+                    <p>stageasepgbooking@gmail.com</p>
+                    <p class="text-muted">We aim to respond within 24 hours.</p>
+                </div>
+            </div>
+            <div class="contact-form">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Name *</label>
+                            <input type="text" id="name" placeholder="Enter full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" placeholder="Enter email address" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="mobile">Mobile *</label>
+                            <input type="tel" id="mobile" placeholder="Enter mobile number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" placeholder="Enter your current city">
+                        </div>
+                    </div>
+                    <div class="form-group single">
+                        <label for="enquiry">Enquiry Type *</label>
+                        <select id="enquiry" required>
+                            <option value="">--- Select ---</option>
+                            <option value="Booking">Booking/Room Enquiry</option>
+                            <option value="Complaint">Complaint/Issue</option>
+                            <option value="Host">Become a Host</option>
+                            <option value="General">General Query</option>
+                        </select>
+                    </div>
+                    <div class="form-group single">
+                        <label for="message">Message (optional)</label>
+<textarea id="message" placeholder="Type your detailed message here (optional)"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary form-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

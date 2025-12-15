@@ -1,0 +1,230 @@
+﻿@model List<StayEasePG.Models.BookingViewModel>
+@{
+    ViewBag.Title = "My Bookings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+    /* -------------------------------------------------------------------------- */
+    /* THEME VARIABLES (Consistent with previous pages)                             */
+    /* -------------------------------------------------------------------------- */
+    :root {
+        --bg: #0f1215;
+        --panel: #1d2227;
+        --text: #e9eef2;
+        --sub: #a9b0b6;
+        --accent: #ffce4c; /* Gold Accent */
+        --accent2: #c9a34f;
+        --border-color: rgba(255, 206, 76, 0.1); /* Light Gold Border */
+        --success: #35a350; /* Green for Checked-In */
+        --warning: #ffce4c; /* Gold/Yellow for Pending */
+        --danger: #e74c3c; /* Red for Cancel/Refund */
+        --radius: 8px;
+        font-family: 'Inter', sans-serif;
+    }
+    /* Base Styling */
+    body {
+        background: linear-gradient(180deg, var(--bg), #0b0d0f 70%);
+        color: var(--text);
+    }
+    /* Page Header */
+    h2 {
+        font-size: 34px;
+        font-weight: 800;
+        color: var(--accent);
+        text-align: center;
+        margin: 30px 0 25px 0;
+    }
+    /* Alert Styling (for TempData) */
+    .alert-danger {
+        background-color: rgba(231, 76, 60, 0.2);
+        color: var(--danger);
+        border: 1px solid var(--danger);
+        padding: 15px;
+        border-radius: var(--radius);
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 600;
+        max-width: 800px;
+        margin: 0 auto 20px auto;
+    }
+    /* -------------------------------------------------------------------------- */
+    /* TABLE STYLING (Replacing default Bootstrap table)                          */
+    /* -------------------------------------------------------------------------- */
+    .table-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    .table-bordered {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 20px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        overflow: hidden; /* Important for containing borders */
+        background-color: var(--panel);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+        .table-bordered th,
+        .table-bordered td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            font-size: 14px;
+        }
+
+            .table-bordered th:last-child,
+            .table-bordered td:last-child {
+                border-right: none;
+            }
+        /* Table Header */
+        .table-bordered thead tr {
+            background-color: #171a21; /* Slightly darker header */
+        }
+
+        .table-bordered th {
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        /* Table Body */
+        .table-bordered tbody tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.05); /* Subtle striping */
+        }
+
+        .table-bordered tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+    /* Status Badges & Text */
+    .status-badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-weight: 700;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-success {
+        color: var(--success);
+        background-color: rgba(53, 163, 80, 0.15);
+    }
+
+    .status-warning {
+        color: var(--warning);
+        background-color: rgba(255, 206, 76, 0.15);
+    }
+
+    .status-danger {
+        color: var(--danger);
+        background-color: rgba(231, 76, 60, 0.15);
+    }
+
+    .status-muted {
+        color: var(--sub);
+    }
+    /* Action Button */
+    .btn-action {
+        padding: 8px 14px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 13px;
+        transition: opacity 0.2s;
+        display: inline-block;
+        border: 1px solid transparent;
+    }
+
+    .btn-danger {
+        background-color: var(--danger);
+        color: var(--text);
+        border-color: var(--danger);
+    }
+
+        .btn-danger:hover {
+            opacity: 0.9;
+            background-color: #c0392b;
+        }
+</style>
+<div class="table-container">
+    <h2>My Bookings</h2>
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>PG Name</th>
+                <th>City</th>
+                <th>Address</th>
+                <th>Room Type</th>
+                <th>Payment Status</th>
+                <th>Payment Method</th>
+                <th>Check-In Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var b in Model)
+            {
+                <tr>
+                    <td>@b.PGName</td>
+                    <td>@b.City</td>
+                    <td><span class="status-muted">@b.Address</span></td>
+                    <td>@b.RoomType</td>
+                    <td>
+                        @{
+                            string paymentClass = b.PaymentStatus == "Completed" ? "status-success" :
+                                                   b.PaymentStatus == "Refunded" ? "status-danger" :
+                                                   "status-warning";
+                        }
+                        <span class="status-badge @paymentClass">@b.PaymentStatus</span>
+                    </td>
+                    <td><span class="status-muted">@b.PaymentMethod</span></td>
+                    <td>
+                        @if (b.CheckInStatus == "CheckedIn")
+                        {
+                            <span class="status-badge status-success">Checked-In</span>
+                        }
+                        else if (b.CheckInStatus == "CheckedOut")
+                        {
+                            <span class="status-badge status-muted">Checked-Out</span>
+                        }
+                        else
+                        {
+                            <span class="status-badge status-warning">Pending</span>
+                        }
+                    </td>
+                    <td>
+                        @if (b.CheckInStatus == "CheckedIn" || b.CheckInStatus == "CheckedOut")
+                        {
+                            <span class="status-muted">No Action</span>
+                        }
+                        else if (b.PaymentStatus != "Refunded")
+                        {
+                            <a href="@Url.Action("CancelBooking", "UserDashboard", new { bookingId = b.BookingID, roomId = b.RoomID })"
+                               class="btn-action btn-danger"
+                               onclick="return confirm('Are you sure you want to cancel this booking? This action cannot be undone.');">
+                                Cancel
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="status-badge status-danger">Cancelled</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,125 @@
+﻿@model System.Data.DataTable
+@{
+    ViewBag.Title = "Super Admin Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #071028, #0b1c3f);
+        color: white;
+    }
+
+    .card-box {
+        background: rgba(255,255,255,0.06);
+        border-radius: 16px;
+        padding: 25px;
+        border: 1px solid rgba(255,255,255,0.15);
+        box-shadow: 0 0 20px rgba(0,0,0,0.45);
+    }
+
+    table {
+        color: white;
+    }
+
+    th {
+        color: #f5d26a;
+    }
+
+    .badge-status {
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-weight: 600;
+    }
+
+    .pending {
+        background: orange;
+        color: black;
+    }
+
+    .verified {
+        background: #17a2b8;
+    }
+
+    .approved {
+        background: #28a745;
+    }
+
+    .declined {
+        background: #dc3545;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="card-box">
+        <h3 class="text-center mb-4 text-warning">Pending Admin Approvals</h3>
+
+        @if (TempData["success"] != null)
+        {
+            <div class="alert alert-success">@TempData["success"]</div>
+        }
+        @if (TempData["error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["error"]</div>
+        }
+
+        <table class="table table-bordered table-hover mt-3">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Requested On</th>
+                    <th>Status</th>
+                    <th style="width:230px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (System.Data.DataRow row in Model.Rows)
+                {
+                    string status = row["Status"].ToString();
+
+                    <tr>
+                        <td>@row["FullName"]</td>
+                        <td>@row["Email"]</td>
+                        <td>@row["PhoneNo"]</td>
+                        <td>@Convert.ToDateTime(row["CreatedOn"]).ToString("dd-MMM-yyyy")</td>
+
+                        <td>
+                            <span class="badge-status @status.ToLower()">@status</span>
+                        </td>
+
+                        <td>
+                            @* VERIFY *@
+                            @if (status == "Pending")
+                            {
+                                <a href="/SuperAdmin/Verify/@row["RequestID"]"
+                                   class="btn btn-info btn-sm">
+                                    Verify
+                                </a>
+                            }
+
+                            @* APPROVE *@
+                            @if (status == "Verified")
+                            {
+                                <a href="/SuperAdmin/Approve/@row["RequestID"]"
+                                   class="btn btn-success btn-sm">
+                                    Approve
+                                </a>
+                            }
+
+                            @* DECLINE *@
+                            @if (status != "Approved")
+                            {
+                                <a href="/SuperAdmin/Decline/@row["RequestID"]"
+                                   class="btn btn-danger btn-sm">
+                                    Decline
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

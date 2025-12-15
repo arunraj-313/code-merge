@@ -1,0 +1,453 @@
+﻿@model List<StayEasePG.Models.PG>
+@{
+    // Assuming this is a Razor View for the homepage (Index)
+    ViewBag.Title = "Stay-Ease PG - Find Your Perfect Stay";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Keep your layout reference
+}
+<style>
+    /* -------------------------------------------------------------------------- */
+    /* THEME & BASE                                        */
+    /* -------------------------------------------------------------------------- */
+    :root {
+        --color-dark-bg: #171a21;
+        --color-card-bg: #1f242d;
+        --color-accent-yellow: #ffce4c;
+        --color-text-light: #ffffff;
+        --color-text-muted: #9fa6b3;
+    }
+
+    body {
+        background-color: var(--color-dark-bg) !important;
+        color: var(--color-text-light);
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    /* Titles */
+    h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-accent-yellow);
+        text-align: center;
+        margin-bottom: 2rem;
+        margin-top: 3rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--color-text-light);
+    }
+    /* Main Container: Limits width and centers content */
+    .content-wrapper {
+        max-width: 1200px;
+        margin: 0 auto; /* Centers the whole wrapper */
+        padding: 0 15px;
+    }
+    /* -------------------------------------------------------------------------- */
+    /* HERO SECTION                                    */
+    /* -------------------------------------------------------------------------- */
+    .hero {
+        text-align: center;
+        padding: 5rem 0 3rem;
+        background-color: #1a1e26;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    }
+
+        .hero h1 {
+            color: var(--color-accent-yellow);
+            text-shadow: 0 0 10px rgba(255, 206, 76, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+            margin-bottom: 2.5rem;
+        }
+    /* Search Button Styling (No animation) */
+    .search-hero-btn {
+        display: inline-block;
+        background-color: var(--color-accent-yellow);
+        color: var(--color-dark-bg);
+        font-weight: 700;
+        font-size: 1.2rem;
+        padding: 0.8rem 2.5rem;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s;
+    }
+
+        .search-hero-btn:hover {
+            background-color: #ffde78;
+            transform: scale(1.05); /* Lifts slightly */
+            box-shadow: 0 8px 20px rgba(255, 206, 76, 0.4);
+        }
+    /* -------------------------------------------------------------------------- */
+    /* CITY SECTION (Fixed 4-per-row layout)                                      */
+    /* -------------------------------------------------------------------------- */
+    .city-section {
+        padding: 2rem 0;
+        text-align: center;
+    }
+
+    .city-row {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .city-card {
+        /* Fixed width ensures exactly 4 cards fit within the container's max-width */
+        width: 200px;
+        background-color: var(--color-card-bg);
+        padding: 15px;
+        border-radius: 12px;
+        transition: transform 0.2s, box-shadow 0.2s, border 0.2s;
+        cursor: pointer;
+        border: 2px solid transparent;
+        box-sizing: border-box; /* Includes padding/border in the width */
+    }
+
+        .city-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+            border-color: var(--color-accent-yellow);
+        }
+
+    .city-img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .city-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: var(--color-text-light);
+    }
+    /* -------------------------------------------------------------------------- */
+    /* FEATURES GRID (Why Stay-Ease)                                              */
+    /* -------------------------------------------------------------------------- */
+    .features-section {
+        padding: 2rem 0 4rem;
+        background-color: #1a1e26;
+    }
+
+    .features-grid {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap; /* Allows wrapping on smaller screens */
+        gap: 30px;
+        padding: 0 15px;
+    }
+
+    .feature-card {
+        width: 280px; /* Fixed width */
+        background-color: var(--color-card-bg);
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        text-align: center;
+        transition: background-color 0.3s;
+    }
+
+        .feature-card:hover {
+            background-color: #2c323c;
+        }
+
+    .feature-icon {
+        margin: 0 auto 15px;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: #0f1a2e;
+    }
+
+    .feature-card h3 {
+        color: var(--color-accent-yellow);
+        margin-bottom: 10px;
+    }
+
+    .feature-card p {
+        color: var(--color-text-muted);
+    }
+    /* -------------------------------------------------------------------------- */
+    /* FEATURED PGs                                                               */
+    /* -------------------------------------------------------------------------- */
+    .featured {
+        padding: 4rem 0;
+    }
+
+        .featured h2 {
+            color: var(--color-text-light);
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+    .featured-row {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    .featured-card {
+        width: 300px; /* Fixed width */
+        background-color: var(--color-card-bg);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+        transition: transform 0.3s;
+    }
+
+        .featured-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .featured-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .featured-card h3, .featured-card p {
+            padding: 0 15px;
+        }
+
+        .featured-card button {
+            background-color: var(--color-accent-yellow);
+            color: var(--color-dark-bg);
+            border: none;
+            width: calc(100% - 30px);
+            padding: 10px;
+            margin: 0 15px 15px 15px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+            .featured-card button:hover {
+                background-color: #ffde78;
+            }
+    /* -------------------------------------------------------------------------- */
+    /* WHY CHOOSE EASYSTAY (Final feature section)                                */
+    /* -------------------------------------------------------------------------- */
+    .features {
+        padding: 4rem 0;
+        background-color: #1a1e26;
+    }
+
+        .features h2 {
+            color: var(--color-accent-yellow);
+        }
+
+    .feature-row {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    .feature-box {
+        width: 300px; /* Fixed width */
+        text-align: center;
+        padding: 20px;
+        background-color: var(--color-card-bg);
+        border-radius: 12px;
+    }
+
+        .feature-box .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .feature-box h4 {
+            color: var(--color-text-light);
+            font-size: 1.15rem;
+            margin-bottom: 5px;
+        }
+
+        .feature-box p {
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+        }
+</style>
+<div class="content-wrapper">
+    <section class="hero">
+        <h1>Find Your Perfect PG</h1>
+        <p>Discover boys, girls & co-living PGs in top cities with transparent pricing.</p>
+        <a href="@Url.Action("Index", "PGMaster")" class="search-hero-btn">
+            Search Now
+        </a>
+    </section>
+    <section class="city-section">
+        <h2 class="features-title">Top Cities</h2>
+        <div class="city-row">
+            <div class="city-card onclick=" goToCity('/PGMaster/Index?city=Chennai', 'Chennai')"">
+            <img class="city-img" src="https://visor.gumlet.io/public/assets/home/desktop/cities/chennai.svg">
+            <div class="city-name">Chennai</div>
+        </div>
+        <div class="city-card onclick=" goToCity('/PGMaster/Index?city=Bangalore', 'Bangalore')"">
+        <img class="city-img" src="https://visor.gumlet.io/public/assets/home/desktop/cities/bangalore_blue.svg">
+        <div class="city-name">Bangalore</div>
+</div>
+<div class="city-card onclick=" goToCity('/PGMaster/Index?city=Coimbatore', 'Coimbatore')"">
+<img class="city-img" src="https://visor.gumlet.io/public/assets/home/desktop/cities/coimbatore.svg">
+<div class="city-name">Coimbatore</div>
+</div>
+<div class="city-card onclick=" goToCity('/PGMaster/Index?city=Pune', 'Pune')"">
+<img class="city-img" src="https://visor.gumlet.io/public/assets/home/desktop/cities/pune.svg">
+<div class="city-name">Pune</div>
+</div>
+</div>
+<div class="city-row">
+    <div class="city-card onclick=" goToCity('/PGMaster/Index?city=Hyderabad', 'Hyderabad')"">
+    <img class="city-img" src="https://visor.gumlet.io/public/assets/home/desktop/cities/hyderabad_blue.svg">
+    <div class="city-name">Hyderabad</div>
+</div>
+<div class="city-card onclick=" goToCity('/PGMaster/Index?city=Noida', 'Noida')"">
+<img class="city-img" src="https://visor.gumlet.io/public/assets/home/desktop/cities/noida.svg">
+<div class="city-name">Noida</div>
+</div>
+<div class="city-card onclick=" goToCity('/PGMaster/Index?city=Delhi', 'Delhi')"">
+<img class="city-img" src="https://visor.gumlet.io/public/assets/home/desktop/cities/delhi.svg">
+<div class="city-name">Delhi</div>
+</div>
+<div class="city-card onclick=" goToCity('/PGMaster/Index?city=Mumbai', 'Mumbai')"">
+<img class="city-img" src="https://visor.gumlet.io/public/assets/home/desktop/cities/mumbai_blue.svg">
+<div class="city-name">Mumbai</div>
+</div>
+</div>
+</section>
+<section class="features-section">
+    <h2 class="features-title">Why Stay-Ease PG Is The Best Property Renting Platform For You?</h2>
+    <div class="features-grid">
+        <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 3l9 7v11h-6v-6H9v6H3V10l9-7z" fill="#f5d26a"></path>
+                    <path d="M12 11a3 3 0 013 3c0 2-3 5-3 5s-3-3-3-5a3 3 0 013-3z" fill="#34d399"></path>
+                </svg>
+            </div>
+            <h3>Ideal Rooms</h3>
+            <p>No need to visit the place. What you see is what you get—authentic listings and verified images for peace of mind.</p>
+        </article>
+        <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" stroke="#ef4444" stroke-width="2"></circle>
+                    <path d="M8 8l8 8M16 8l-8 8" stroke="#ef4444" stroke-width="2" stroke-linecap="round"></path>
+                </svg>
+            </div>
+            <h3>No Brokers</h3>
+            <p>My PG is completely broker‑free. No middlemen, no hidden fees. Browse, choose, and book online directly.</p>
+        </article>
+        <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 3l8 4v5c0 4.5-3.2 8.6-8 9-4.8-.4-8-4.5-8-9V7l8-4z" fill="#34d399"></path>
+                    <path d="M9.5 12l2 2 4-4" stroke="#0f1a2e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+            </div>
+            <h3>Secure Payments</h3>
+            <p>We promise a 100% safe and secure payment network—supporting both online & offline options.</p>
+        </article>
+        <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="3" y="6" width="18" height="12" rx="2" fill="#facc15"></rect>
+                    <circle cx="12" cy="12" r="3" fill="#0f1a2e"></circle>
+                    <path d="M7 9h2M15 15h2" stroke="#0f1a2e" stroke-width="2" stroke-linecap="round"></path>
+                </svg>
+            </div>
+            <h3>Refer &amp; Earn</h3>
+            <p>Refer My PG listings to friends & family. The more you refer, the more you earn upon verification.</p>
+        </article>
+        <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9" stroke="#60a5fa" stroke-width="2"></circle>
+                    <path d="M12 12l5-2" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"></path>
+                    <circle cx="12" cy="12" r="2" fill="#60a5fa"></circle>
+                </svg>
+            </div>
+            <h3>Minimum Price</h3>
+            <p>Get the best accommodation at minimum cost with 24×7 support—transparent pricing, no surprises.</p>
+        </article>
+    </div>
+</section>
+<section class="featured">
+    <h2>Featured PGs Near You</h2>
+    <div class="featured-row">
+        <div class="featured-card">
+            <img src="/mnt/data/IMG_712EF7FB-07D7-4A40-B3AF-E98A91627183.jpeg">
+            <h3>Luxury Boys PG</h3>
+            <p>Bangalore • From ₹9500</p>
+            <button>View Details</button>
+        </div>
+        <div class="featured-card">
+            <img src="/mnt/data/IMG_712EF7FB-07D7-4A40-B3AF-E98A91627183.jpeg">
+            <h3>Premium Girls PG</h3>
+            <p>Chennai • From ₹10500</p>
+            <button>View Details</button>
+        </div>
+        <div class="featured-card">
+            <img src="/mnt/data/IMG_712EF7FB-07D7-4A40-B3AF-E98A91627183.jpeg">
+            <h3>Co-Living Studio</h3>
+            <p>Pune • From ₹12000</p>
+            <button>View Details</button>
+        </div>
+    </div>
+</section>
+<section class="features">
+    <h2>Why Choose EasyStay</h2>
+    <div class="feature-row">
+        <div class="feature-box">
+            <div class="icon">🏠</div>
+            <h4>Verified Stays</h4>
+            <p>Every property is checked to ensure safety & comfort.</p>
+        </div>
+        <div class="feature-box">
+            <div class="icon">💳</div>
+            <h4>Secure Payments</h4>
+            <p>End-to-end encrypted transactions.</p>
+        </div>
+        <div class="feature-box">
+            <div class="icon">⭐</div>
+            <h4>Premium Service</h4>
+            <p>24×7 support with customer-first service.</p>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Original JavaScript functions preserved:
+    function selectCity(card) {
+        document.querySelectorAll('.city-card').forEach(c => {
+            c.classList.remove('active');
+        });
+        card.classList.add('active');
+        let img = card.querySelector(".city-img");
+        let realUrl = img.getAttribute("data-real");
+        img.src = realUrl;
+    }
+    function goToCity(pagePath, pageTitle) {
+        try {
+            sessionStorage.setItem('easyStay_pageTitle', pageTitle || '');
+            window.location.href = pagePath;
+        } catch (e) {
+            window.location.href = pagePath;
+        }
+    }
+</script>

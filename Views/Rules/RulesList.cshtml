@@ -1,0 +1,55 @@
+﻿@model IEnumerable<StayEasePG.Models.PG_Rules>
+@{
+    ViewBag.Title = "Rules List";
+    // Inline CSS for the dark theme, matching the image as closely as possible
+    var headerStyle = "color: white; border-bottom: 2px solid #555; padding-bottom: 10px;";
+    var tableStyle = "background-color: #2b2b2b; color: white; border: 1px solid #444;";
+    var tableHeaderStyle = "background-color: #383838; color: #a0a0a0; border: 1px solid #444; font-weight: bold;";
+    var tableCellStyle = "border: 1px solid #444; padding: 10px;";
+}
+<div style="background-color: #1e1e1e; padding: 20px; min-height: 80vh;">
+    @* Main Dark Background *@
+    <h2 style="display:flex; justify-content:space-between; align-items:center; @headerStyle">
+        Rules List
+        <a href="@Url.Action("Dashboard","Admin")" class="btn" style="background-color: #383838; color: #f0f0f0; border: 1px solid #555;">
+            ← Back
+        </a>
+    </h2>
+    <p>
+        @Html.ActionLink("Add New Rule", "AddRules", null, new { @class = "btn", style = "background-color: #f7a01a; color: black; font-weight: bold; border: none; margin-bottom: 15px;" })
+        @* The orange/yellow button style is based on the '+ Add Room' button in the image *@
+    </p>
+    <table class="table" style="@tableStyle">
+        <thead>
+            <tr>
+                <th style="@tableHeaderStyle">PG Name</th>
+                <th style="@tableHeaderStyle">Room Type</th>
+                <th style="@tableHeaderStyle">Check-In</th>
+                <th style="@tableHeaderStyle">Check-Out</th>
+                <th style="@tableHeaderStyle">Visitors Allowed</th>
+                <th style="@tableHeaderStyle">Gate Closing</th>
+                <th style="@tableHeaderStyle">Notice Period</th>
+                <th style="@tableHeaderStyle">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="@tableCellStyle">@item.PG.PGName</td>
+                    <td style="@tableCellStyle">@item.RoomDetails.RoomType</td>
+                    <td style="@tableCellStyle">@item.CheckInTime</td>
+                    <td style="@tableCellStyle">@item.CheckOutTime</td>
+                    <td style="@tableCellStyle">@(item.VisitorsAllowed ? "Yes" : "No")</td>
+                    <td style="@tableCellStyle">@item.GateClosingTime</td>
+                    <td style="@tableCellStyle">@item.NoticePeriod</td>
+                    <td style="@tableCellStyle">
+                        @Html.ActionLink("Edit", "EditRules", new { id = item.RuleID }, new { @class = "btn btn-sm", style = "background-color: #007bff; color: white; border: none;" }) @* Using a common blue for 'Edit' *@
+                        <span style="color:#555;">|</span>
+                        @Html.ActionLink("Delete", "DeleteRules", new { id = item.RuleID }, new { @class = "btn btn-sm", style = "background-color: #dc3545; color: white; border: none;" }) @* Using a common red for 'Delete' *@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,198 @@
+﻿@{
+    ViewBag.Title = "Booking Confirmed";
+    // Assuming the BookingStatus (e.g., Confirmed/Pending) is passed via TempData
+    string finalStatus = TempData["FinalBookingStatus"] as string ?? "Confirmed";
+}
+<style>
+
+    /* -------------------------------------------------------------------------- */
+    /* THEME VARIABLES & BASE STYLES                                              */
+    /* -------------------------------------------------------------------------- */
+    :root {
+        --color-dark-bg: #171a21;
+        --color-card-bg: #1f242d;
+        --color-accent-yellow: #ffce4c;
+        --color-text-light: #ffffff;
+        --color-text-muted: #9fa6b3;
+        --color-border: #3d4554;
+        --color-primary: #ffce4c;
+        --color-success: #34d399; /* Green for success/confirmed */
+        --color-info: #0d6efd; /* Blue for Pending/Info alerts */
+    }
+
+    body {
+        background-color: var(--color-dark-bg) !important;
+        color: var(--color-text-light);
+    }
+
+    .page-wrapper {
+        padding-top: 100px;
+    }
+    /* -------------------------------------------------------------------------- */
+    /* BOOKING CONTAINER STYLING (Matching previous steps)                        */
+    /* -------------------------------------------------------------------------- */
+    .booking-container {
+        /* Matching the max-width used in the Select Duration form (700px) */
+        max-width: 700px;
+        margin: 30px auto;
+        padding: 35px; /* Increased padding for consistency */
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        background-color: var(--color-card-bg);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    .header-info h2 {
+        color: var(--color-accent-yellow);
+        font-weight: 700;
+        margin: 0;
+        font-size: 2em;
+    }
+    /* -------------------------------------------------------------------------- */
+    /* PROGRESS BAR STYLING (All steps completed)                                 */
+    /* -------------------------------------------------------------------------- */
+    .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+        .progress-steps span {
+            flex-grow: 1;
+            text-align: center;
+            color: var(--color-border);
+            border-bottom: 3px solid var(--color-border);
+            padding-bottom: 5px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin: 0 5px;
+        }
+
+            .progress-steps span:first-child {
+                margin-left: 0;
+            }
+
+            .progress-steps span:last-child {
+                margin-right: 0;
+            }
+        /* All steps are completed in this view, styling them green */
+        .progress-steps .completed,
+        .progress-steps .active {
+            color: var(--color-success) !important;
+            border-bottom-color: var(--color-success) !important;
+        }
+    /* -------------------------------------------------------------------------- */
+    /* ALERT/STATUS MESSAGE STYLING                                               */
+    /* -------------------------------------------------------------------------- */
+    /* Successful Confirmation Alert */
+    .alert-success {
+        background-color: #243534; /* Dark success background */
+        color: var(--color-success);
+        border-color: #4a6c6a;
+        border-radius: 10px;
+    }
+
+        .alert-success h3 {
+            color: var(--color-success);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 0;
+        }
+    /* Pending/Info Alert (for Cash on Hand) */
+    .alert-info {
+        background-color: #222f3e; /* Dark info background */
+        color: var(--color-info);
+        border-color: #4f73a3;
+        border-radius: 10px;
+    }
+
+        .alert-info h3 {
+            color: var(--color-info);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 0;
+        }
+    /* Common Alert Paragraphs */
+    .alert p {
+        color: var(--color-text-light); /* Ensure body text is white/light */
+        margin-bottom: 5px;
+        font-size: 1rem;
+    }
+    /* Muted Text */
+    p.text-muted {
+        color: var(--color-text-muted) !important;
+    }
+    /* -------------------------------------------------------------------------- */
+    /* BUTTON STYLING                                                             */
+    /* -------------------------------------------------------------------------- */
+    /* Primary Action Button (View All PGs) */
+    .btn-primary {
+        background-color: var(--color-primary) !important;
+        border: 2px solid var(--color-primary) !important;
+        color: var(--color-dark-bg) !important;
+        font-weight: 700;
+        border-radius: 8px;
+        padding: 12px 20px;
+        transition: background-color 0.2s;
+        text-transform: uppercase;
+    }
+
+        .btn-primary:hover {
+            background-color: #ffde78 !important;
+            border-color: #ffde78 !important;
+        }
+    /* Secondary Action Button (View My Bookings) */
+    .btn-outline-secondary {
+        background-color: transparent !important;
+        border: 1px solid var(--color-border) !important;
+        color: var(--color-text-light) !important;
+        transition: background-color 0.2s, color 0.2s;
+        border-radius: 8px;
+        padding: 12px 20px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #3d4554 !important;
+            color: var(--color-accent-yellow) !important;
+        }
+    /* Utility spacing */
+    .ml-3 {
+        margin-left: 1rem !important;
+    }
+</style>
+<div class="booking-container text-center">
+    <div class="header-info">
+        <h2>Booking Complete!</h2>
+    </div>
+    <div class="progress-steps">
+        <span class="completed">1. Payment Details</span>
+        <span class="completed">2. Confirm Booking</span>
+        <span class="active" style="border-bottom-color: #28a745; color: #28a745;">3. Booking Confirmation</span>
+    </div>
+    @if (finalStatus == "Confirmed" || finalStatus == "Paid")
+    {
+        <div class="alert alert-success mt-4 p-4">
+            <h3>🎉 Booking Successful!</h3>
+            <p>Your room has been reserved and your payment has been processed.</p>
+            <p>Your Booking ID is: **@(TempData["NewBookingID"] ?? "N/A")**</p>
+        </div>
+    }
+    else // Status is Pending (Cash on Hand)
+    {
+        <div class="alert alert-info mt-4 p-4">
+            <h3>📝 Booking Reserved!</h3>
+            <p>Your room has been reserved. Payment is set to **Cash on Hand**.</p>
+            <p>Please pay the amount (₹ **@(TempData["FinalAmount"] ?? "N/A")**) upon check-in.</p>
+            <p>Your Booking ID is: **@(TempData["NewBookingID"] ?? "N/A")**</p>
+        </div>
+    }
+    <p class="text-muted mt-4">Thank you for choosing StayEasePG.</p>
+    <div class="mt-4">
+        @Html.ActionLink("View All PGs", "Index", "PGMaster", null, new { @class = "btn btn-primary btn-lg" })
+        @* Add a link to the user's booking history if that action exists *@
+        @* Html.ActionLink("View My Bookings", "BookingHistory", null, new { @class = "btn btn-outline-secondary ml-3" }) *@
+    </div>
+</div>

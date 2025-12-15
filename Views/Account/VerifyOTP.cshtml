@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "Verify OTP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #071028, #0b1c3f);
+        color: white;
+    }
+
+    .page-center {
+        min-height: 90vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .otp-card {
+        background: rgba(255, 255, 255, 0.06);
+        padding: 35px;
+        width: 420px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 20px rgba(0,0,0,0.45);
+        transition: 0.25s ease;
+    }
+
+        .otp-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 0 22px rgba(245, 210, 106, 0.35);
+            border-color: #f5d26a;
+        }
+
+    .otp-title {
+        text-align: center;
+        color: #f5d26a;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        color: #f5d26a;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .form-control {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        color: white !important;
+        border-radius: 10px;
+        padding: 12px;
+        height: 45px;
+        box-shadow: none !important;
+    }
+
+        .form-control:focus {
+            border-color: #f5d26a !important;
+            background: rgba(255, 255, 255, 0.15) !important;
+            box-shadow: 0 0 8px rgba(245, 210, 106, 0.5) !important;
+            outline: none;
+        }
+
+    .btn-verify {
+        background: #4CAF50;
+        color: #071028;
+        border: none;
+        padding: 12px;
+        width: 100%;
+        font-weight: 700;
+        border-radius: 10px;
+        margin-top: 15px;
+        transition: .25s;
+    }
+
+        .btn-verify:hover {
+            background: #66BB6A;
+            box-shadow: 0 0 12px rgba(102, 187, 106, 0.6);
+        }
+
+    .alert {
+        border-radius: 10px;
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="page-center">
+    <div class="otp-card">
+        <h3 class="otp-title">Verify Registration OTP</h3>
+
+        @if (TempData["error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["error"]</div>
+        }
+
+        <form method="post" action="/Account/VerifyOTP">
+            <div class="mb-3">
+                <label class="form-label">Enter OTP</label>
+                <input type="text"
+                       name="otp"
+                       class="form-control"
+                       placeholder="Enter OTP"
+                       required />
+            </div>
+
+            <button type="submit" class="btn-verify">Verify OTP</button>
+        </form>
+    </div>
+</div>

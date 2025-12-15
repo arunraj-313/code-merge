@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "Admin Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="admin-container">
+    <h1>Stay Ease Admin Panel</h1>
+    <div class="admin-grid">
+        <a href="@Url.Action("PGList", "PG")" class="admin-card" style="text-decoration:none; color:inherit;">
+            <h2>Manage PG Listings</h2>
+            <p>Add, update, or delete PG details.</p>
+        </a>
+        <a class="admin-card" href="@Url.Action("RoomList", "Room")">
+            <h2>Room Details</h2>
+            <p>Set Sharing type, Amentities.</p>
+        </a>
+        <a class="admin-card"
+           href="@Url.Action("FoodMenuList", "FoodMenu", new { pgid = 1, roomid = 1 })">
+            <h2>Food Menu</h2>
+            <p>Update breakfast, lunch, and dinner menus.</p>
+        </a>
+        <a class="admin-card" href="@Url.Action("RulesList", "Rules")">
+            <h2>PG_Rules</h2>
+            <p>Rules and Regulations</p>
+        </a>
+        <a class="admin-card" href="@Url.Action("AdminPayments", "Payment")">
+            <h2>Payments</h2>
+            <p>Track rent payments & receipts.</p>
+        </a>
+        <a class="admin-card" href="@Url.Action("AdminUserAccounts", "UserAccount")">
+            <h2>User Account Maintenance</h2>
+            <p>View all users currently staying in your PG.</p>
+        </a>
+    </div>
+</div>

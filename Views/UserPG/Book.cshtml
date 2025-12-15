@@ -1,0 +1,25 @@
+﻿@model StayEasePG.Models.BookingViewModel
+<h2>Booking – @Model.PGName</h2>
+<h4>@Model.RoomType</h4>
+@using (Html.BeginForm())
+{
+    <label>Check-in Date</label>
+    @Html.TextBoxFor(m => m.CheckInDate, new { @class = "form-control", type = "date" })
+    <label>Booking Type</label>
+    @Html.DropDownListFor(m => m.BookingType,
+        new SelectList(new[] { "Day", "Week", "Month" }),
+        new { @class="form-control" })
+    <label>Duration</label>
+    @Html.TextBoxFor(m => m.Duration, new { @class = "form-control" })
+    <label>Total Amount</label>
+    @Html.TextBoxFor(m => m.TotalAmount, new { @class = "form-control" })
+    <label>Payment Status</label>
+    @Html.DropDownListFor(m => m.PaymentStatus,
+        new SelectList(new[] { "Paid", "Pending" }),
+        new { @class="form-control" })
+    <label>Booking Status</label>
+    @Html.DropDownListFor(m => m.BookingStatus,
+        new SelectList(new[] { "Active", "Cancelled" }),
+        new { @class="form-control" })
+    <button type="submit" class="btn btn-primary">Book</button>
+}

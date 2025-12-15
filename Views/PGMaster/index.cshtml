@@ -1,0 +1,202 @@
+﻿@model List<StayEasePG.Models.PGModel>
+@{
+    ViewBag.Title = "PG Listings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+    /* -------------------------------------------------------------------------- */
+    /* THEME & BASE STYLES                                                        */
+    /* -------------------------------------------------------------------------- */
+    :root {
+        --color-dark-bg: #171a21;
+        --color-card-bg: #1f242d;
+        --color-accent-yellow: #ffce4c;
+        --color-text-light: #ffffff;
+        --color-text-muted: #9fa6b3;
+        --color-border: #3d4554;
+    }
+
+    body {
+        background-color: var(--color-dark-bg) !important;
+        color: var(--color-text-light);
+    }
+    /* FIX: Top padding to clear the layout navigation */
+    .pg-listing-container {
+        padding: 20px;
+        padding-top: 40px; /* Adjust this value if your layout bar is taller/shorter */
+    }
+    /* FIX: Flex container for Title and Button alignment */
+    .title-and-actions {
+        display: flex;
+        justify-content: space-between; /* Pushes the title left and button right */
+        align-items: center; /* Vertically aligns the title and button text */
+        margin-bottom: 25px; /* Space below the title/button row */
+    }
+    /* Page Title (now inside .title-and-actions) */
+    .pg-listing-container h2 {
+        font-weight: 700;
+        color: var(--color-accent-yellow);
+        margin: 0; /* Remove default h2 margin to align perfectly with button */
+    }
+    /* PG Card Title */
+    .pg-card h4 {
+        color: var(--color-accent-yellow);
+        font-weight: 700;
+        margin-bottom: 5px;
+        font-size: 1.5rem;
+    }
+    /* PG Type (e.g., Boys/Girls/Co-living) */
+    .pg-card p strong {
+        color: var(--color-text-light);
+        font-size: 1.1rem;
+        display: block;
+        margin-bottom: 15px;
+    }
+    /* -------------------------------------------------------------------------- */
+    /* CARD STYLES (col-md-4)                                                     */
+    /* -------------------------------------------------------------------------- */
+    .pg-card {
+        background-color: var(--color-card-bg);
+        border: 1px solid var(--color-border) !important;
+        border-radius: 12px;
+        margin: 15px !important;
+        padding: 20px !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .pg-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
+        }
+    /* Detail Rows */
+    .pg-detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+        .pg-detail-row:last-of-type {
+            border-bottom: none;
+            margin-bottom: 15px;
+        }
+
+        .pg-detail-row span:first-child {
+            font-weight: 500;
+            color: var(--color-text-muted);
+        }
+
+        .pg-detail-row span:last-child {
+            font-weight: 600;
+            color: var(--color-text-light);
+        }
+    /* Price Section */
+    .pg-price-section {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid var(--color-border);
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--color-accent-yellow);
+    }
+
+        .pg-price-section span {
+            margin-right: 15px;
+        }
+    /* -------------------------------------------------------------------------- */
+    /* BUTTON STYLES                                                              */
+    /* -------------------------------------------------------------------------- */
+    /* Back Button (Secondary/Outline Style) */
+    .btn-secondary {
+        background-color: transparent !important;
+        border: 1px solid var(--color-border) !important;
+        color: var(--color-text-light) !important;
+        /* Removed margin-bottom here since the parent container handles spacing */
+        transition: background-color 0.2s, color 0.2s;
+        border-radius: 8px;
+        padding: 8px 15px; /* Added padding for consistent button look */
+    }
+
+        .btn-secondary:hover {
+            background-color: #3d4554 !important;
+            color: var(--color-accent-yellow) !important;
+        }
+    /* View Details Button (Outline Accent) */
+    .btn-outline-accent {
+        background-color: transparent;
+        border: 2px solid var(--color-accent-yellow);
+        color: var(--color-accent-yellow);
+        border-radius: 8px;
+        padding: 8px 15px;
+        font-weight: 600;
+        transition: background-color 0.2s, color 0.2s;
+    }
+
+        .btn-outline-accent:hover {
+            background-color: var(--color-accent-yellow);
+            color: var(--color-dark-bg);
+            text-decoration: none;
+        }
+    /* Book Room Button (Primary Accent) */
+    .btn-accent {
+        background-color: var(--color-accent-yellow);
+        border: 2px solid var(--color-accent-yellow);
+        color: var(--color-dark-bg);
+        margin-left: 10px;
+        border-radius: 8px;
+        padding: 8px 15px;
+        font-weight: 600;
+        transition: background-color 0.2s;
+    }
+
+        .btn-accent:hover {
+            background-color: #ffde78;
+            text-decoration: none;
+        }
+</style>
+<div class="container pg-listing-container">
+    <div class="title-and-actions">
+        <h2>PG Listings</h2>
+        <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">
+            ← Back
+        </a>
+    </div>
+    <div class="row">
+        @foreach (var pg in Model)
+        {
+            <div class="col-md-4 pg-card">
+                <div>
+                    <h4>@pg.PGName</h4>
+                    <p><strong>@pg.PGType</strong></p>
+                    <div class="pg-detail-row">
+                        <span>Category</span>
+                        <span>@pg.PGCategory</span>
+                    </div>
+                    <div class="pg-detail-row">
+                        <span>City</span>
+                        <span>@pg.City</span>
+                    </div>
+                    <div class="pg-detail-row">
+                        <span>State</span>
+                        <span>@pg.State</span>
+                    </div>
+                    <div class="pg-detail-row">
+                        <span>Landmark</span>
+                        <span>@pg.Landmark</span>
+                    </div>
+                    <div class="pg-price-section">
+                        <span>₹ @pg.PricePerDay / day</span>
+                        <span>₹ @pg.PricePerWeek / week</span>
+                        <span>₹ @pg.PricePerMonth / month</span>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <a href="/PGMaster/Details/@pg.PGID" class="btn-outline-accent">View Details</a>
+                        <a href="/PGMaster/Details/@pg.PGID" class="btn-accent">Book Room</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

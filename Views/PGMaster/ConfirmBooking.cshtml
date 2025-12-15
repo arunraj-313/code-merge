@@ -1,0 +1,340 @@
+﻿@model StayEasePG.Models.BookingModel
+@{
+    ViewBag.Title = "Confirm Booking";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    // Initialize the baseRent variable
+    decimal baseRent = 0;
+    // CORRECT SYNTAX: Use the C# flow control inside the @{} block
+    if (Model.BookingType == "Day")
+    {
+        baseRent = Model.PricePerDay;
+    }
+    else if (Model.BookingType == "Week")
+    {
+        baseRent = Model.PricePerWeek;
+    }
+    else if (Model.BookingType == "Month")
+    {
+        baseRent = Model.PricePerMonth;
+    }
+}
+<style>
+
+    /* -------------------------------------------------------------------------- */
+    /* THEME VARIABLES & BASE STYLES                                              */
+    /* -------------------------------------------------------------------------- */
+    :root {
+        --color-dark-bg: #171a21;
+        --color-card-bg: #1f242d;
+        --color-accent-yellow: #ffce4c;
+        --color-text-light: #ffffff;
+        --color-text-muted: #9fa6b3;
+        --color-border: #3d4554;
+        --color-primary: #ffce4c;
+        --color-success: #34d399; /* Green for Completed steps/Success button */
+        --color-warning: #ffc107; /* Yellow for Alert box */
+        --color-danger: #ef4444; /* Red for emphasis */
+    }
+
+    body {
+        background-color: var(--color-dark-bg) !important;
+        color: var(--color-text-light);
+    }
+
+    .page-wrapper {
+        padding-top: 10px;
+    }
+    /* -------------------------------------------------------------------------- */
+    /* BOOKING CONTAINER STYLING                                                  */
+    /* -------------------------------------------------------------------------- */
+    .booking-container {
+        max-width: 700px;
+        margin: 30px auto;
+        padding: 35px;
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        background-color: var(--color-card-bg);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+    /* Header Info */
+    .header-info h2 {
+        color: var(--color-accent-yellow);
+        font-weight: 700;
+        margin: 0;
+    }
+    /* Section Headers */
+    h3 {
+        color: var(--color-accent-yellow);
+        font-weight: 600;
+        margin-top: 25px;
+        margin-bottom: 5px;
+    }
+    /* -------------------------------------------------------------------------- */
+    /* PROGRESS BAR STYLING                                                       */
+    /* -------------------------------------------------------------------------- */
+    .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+        .progress-steps span {
+            flex-grow: 1;
+            text-align: center;
+            color: var(--color-border);
+            border-bottom: 3px solid var(--color-border);
+            padding-bottom: 5px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin: 0 5px;
+        }
+
+            .progress-steps span:first-child {
+                margin-left: 0;
+            }
+
+            .progress-steps span:last-child {
+                margin-right: 0;
+            }
+
+        .progress-steps .active {
+            color: var(--color-accent-yellow);
+            border-bottom-color: var(--color-accent-yellow);
+        }
+
+        .progress-steps .completed {
+            color: var(--color-success);
+            border-bottom-color: var(--color-success);
+        }
+    /* -------------------------------------------------------------------------- */
+    /* ALERT BOX STYLING                                                          */
+    /* -------------------------------------------------------------------------- */
+    .alert-warning {
+        background-color: #3d3422;
+        color: var(--color-warning);
+        border-color: #7a6125;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 0.95rem;
+    }
+    /* -------------------------------------------------------------------------- */
+    /* TABLE STYLING                                                              */
+    /* -------------------------------------------------------------------------- */
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .table th, .table td {
+            padding: 12px;
+            vertical-align: top;
+            border-top: 1px solid var(--color-border);
+            color: var(--color-text-light);
+        }
+
+        .table th {
+            font-weight: 700;
+            width: 35%;
+            background-color: #2c323c;
+            color: var(--color-text-muted);
+        }
+
+            .table th.text-center.bg-light,
+            .table thead tr th.table-dark {
+                background-color: #2c323c !important;
+                color: var(--color-accent-yellow) !important;
+                font-size: 1.1rem;
+                border-bottom: 2px solid var(--color-accent-yellow);
+            }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #1a1e25;
+    }
+
+    .table tfoot tr.table-danger th,
+    .table tfoot tr.table-danger td {
+        background-color: #2c323c !important;
+        border-top: 3px solid var(--color-accent-yellow) !important;
+        font-weight: 700;
+        padding: 15px 12px;
+    }
+
+    .total-amount-display {
+        font-size: 1.5em;
+        color: var(--color-success);
+        font-weight: bold;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+    /* -------------------------------------------------------------------------- */
+    /* BUTTON STYLING                                                             */
+    /* -------------------------------------------------------------------------- */
+    /* Back Button (Top Header) */
+    .btn-secondary {
+        background-color: transparent !important;
+        border: 1px solid var(--color-border) !important;
+        color: var(--color-text-light) !important;
+        transition: background-color 0.2s, color 0.2s;
+        border-radius: 8px;
+        padding: 8px 15px;
+    }
+
+        .btn-secondary:hover {
+            background-color: #3d4554 !important;
+            color: var(--color-accent-yellow) !important;
+        }
+    /* Finalize Button (Success Style) */
+    .btn-success {
+        background-color: var(--color-success) !important;
+        border: 2px solid var(--color-success) !important;
+        color: var(--color-dark-bg) !important;
+        font-weight: 700;
+        border-radius: 8px;
+        padding: 12px 20px;
+        transition: background-color 0.2s;
+    }
+
+        .btn-success:hover {
+            background-color: #4cd99a !important;
+            border-color: #4cd99a !important;
+        }
+    /* FIX: Ensure visible gap between Finalize and Go Back buttons */
+    /* The Finalize button already has margin-top: 20px */
+    .go-back-link-container {
+        text-align: center;
+        /* Increased margin top to ensure a clear gap */
+        margin-top: 25px;
+    }
+
+        .go-back-link-container a.btn-secondary {
+            padding: 6px 15px; /* Slightly smaller padding for the link button */
+            font-size: 0.9rem;
+        }
+</style>
+<div class="page-wrapper">
+    <div class="booking-container">
+        <div class="header-info">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom:15px;">
+                <h2>Final Confirmation: @Model.RoomType</h2>
+                <a href="@Url.Action("PaymentDetails", "PGMaster")" class="btn btn-secondary">
+                    ← Back
+                </a>
+            </div>
+        </div>
+        <div class="progress-steps">
+            <span class="completed">1. Payment Details</span>
+            <span class="active">2. Confirm Booking</span>
+            <span>3. Booking Confirmation</span>
+        </div>
+        <h3>Review and Finalize</h3>
+        <div class="alert alert-warning">
+            **ACTION REQUIRED:** Review details and click "Finalize" to confirm reservation and complete payment.
+        </div>
+        <table class="table table-bordered mb-4">
+            <thead>
+                <tr>
+                    <th colspan="2" class="text-center bg-light">Booking Summary</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>PG Name</th>
+                    <td>@Model.PGName</td>
+                </tr>
+                <tr>
+                    <th>Location</th>
+                    <td>@Model.Location</td>
+                </tr>
+                <tr>
+                    <th>Room Type</th>
+                    <td>@Model.RoomType</td>
+                </tr>
+                <tr>
+                    <th>Check-in Date</th>
+                    <td>@Model.CheckInDate.ToShortDateString()</td>
+                </tr>
+                <tr>
+                    <th>Booking Period</th>
+                    <td>@Model.Duration @Model.BookingType</td>
+                </tr>
+                <tr>
+                    <th>Payment Method</th>
+                    <td><strong>@Model.PaymentMethod</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th colspan="2" class="text-center table-dark">Amount Breakdown (Total Due Today)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Base Rent (@Model.BookingType)</td>
+                    <td class="text-right">₹ @baseRent.ToString("N0")</td>
+                </tr>
+                <tr>
+                    <td>Advance Payment</td>
+                    <td class="text-right">₹ @Model.Advance.ToString("N0")</td>
+                </tr>
+                <tr>
+                    <td>Security Deposit</td>
+                    <td class="text-right">₹ @Model.Deposit.ToString("N0")</td>
+                </tr>
+                <tr>
+                    <td>Maintenance Fee</td>
+                    <td class="text-right">₹ @Model.Maintenance.ToString("N0")</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="table-danger">
+                    <th>TOTAL PAYABLE TODAY</th>
+                    <td class="total-amount-display text-right">₹ @Model.TotalAmount.ToString("N0")</td>
+                </tr>
+            </tfoot>
+        </table>
+        @using (Html.BeginForm("FinalizeBooking", "PGMaster", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @* Hidden fields to pass all booking details back to the controller *@
+            @Html.HiddenFor(m => m.PGID)
+            @Html.HiddenFor(m => m.RoomID)
+            @Html.HiddenFor(m => m.PGName)
+            @Html.HiddenFor(m => m.Location)
+            @Html.HiddenFor(m => m.RoomType)
+            @Html.HiddenFor(m => m.CheckInDate)
+            @Html.HiddenFor(m => m.BookingType)
+            @Html.HiddenFor(m => m.Duration)
+            @Html.HiddenFor(m => m.TotalAmount)
+            @Html.HiddenFor(m => m.PaymentMethod)
+            @Html.HiddenFor(m => m.PricePerDay)
+            @Html.HiddenFor(m => m.PricePerWeek)
+            @Html.HiddenFor(m => m.PricePerMonth)
+            @Html.HiddenFor(m => m.Advance)
+            @Html.HiddenFor(m => m.Deposit)
+            @Html.HiddenFor(m => m.Maintenance)
+
+            <button type="submit" class="btn btn-success btn-lg" style="width: 100%; margin-top: 20px;">
+                I Confirm, Finalize Booking
+            </button>
+        }
+        <div class="go-back-link-container">
+            @* Pass necessary IDs to return to the payment details page *@
+            @Html.ActionLink("Go Back to Change Payment", "PaymentDetails", new {
+                pgId = Model.PGID,
+                roomId = Model.RoomID,
+                checkInDate = Model.CheckInDate,
+                selectedBookingType = Model.BookingType
+            }, new { @class = "btn btn-secondary btn-sm" })
+        </div>
+    </div>
+</div>

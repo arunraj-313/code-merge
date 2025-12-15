@@ -1,0 +1,600 @@
+﻿@*@model StayEasePG.Models.UserModel
+
+    @{
+        ViewBag.Title = "Register";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <style>
+        /* Background same as login */
+        body {
+            background: linear-gradient(135deg, #071028, #0b1c3f);
+            color: white;
+        }
+
+        /* Center page like login */
+        .page-center {
+            min-height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Register popup card */
+        .reg-card {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 35px;
+            width: 600px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(0,0,0,0.45);
+            transition: 0.25s ease;
+        }
+
+            .reg-card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 0 22px rgba(245, 210, 106, 0.35);
+                border-color: #f5d26a;
+            }
+
+        .reg-title {
+            text-align: center;
+            color: #f5d26a;
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            color: #f5d26a;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+            .form-control:focus {
+                border-color: #f5d26a;
+                background: rgba(255, 255, 255, 0.15);
+                box-shadow: 0 0 8px rgba(245, 210, 106, 0.5);
+            }
+
+        /* Register button */
+        .btn-register {
+            background: #f5d26a;
+            color: #071028;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            font-weight: 700;
+            border-radius: 10px;
+            margin-top: 15px;
+            transition: .25s;
+        }
+
+            .btn-register:hover {
+                background: #ffe8a4;
+                box-shadow: 0 0 12px rgba(245, 210, 106, 0.6);
+            }
+
+        .login-link {
+            text-align: center;
+            display: block;
+            margin-top: 15px;
+            color: #f5d26a;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+            .login-link:hover {
+                color: white;
+                text-decoration: underline;
+            }
+
+        .mb-3
+        {
+            margin-bottom: 18px;
+        }
+
+        select
+        {
+            height: 45px;
+            padding-left :10px;
+            font-size: 15px;
+            color: #000;
+        }
+
+        select option
+        {
+            color:aliceblue;
+        }
+
+
+
+
+
+
+
+        /* Increase size for all text boxes */
+        .form-control {
+            height: 45px; /* Increase height */
+            font-size: 1.4rem; /* Adjust font    font-size: 1rem;    /* Adjust font size */
+            padding: 10px; /* Add padding for better look */
+            box-sizing: border-box;
+        }
+
+        .form-control {
+            width: 100%; /* Full width inside its column */
+            max-width: 500px; /* Optional: limit max width */
+            height: 45px;
+        }
+
+
+        /* Your base colors (adjust as you prefer) */
+        :root {
+            --input-bg: #2b3b55; /* dark input background */
+            --input-text: #ffffff; /* text color */
+            --input-border: #3c4a67; /* neutral border */
+        }
+
+        /* All text inputs, email, number, password, textarea, select */
+        .form-control,
+        .form-select,
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="password"],
+        textarea,
+        select {
+            background-color: var(--input-bg) !important;
+            color: var(--input-text) !important;
+            border: 1px solid var(--input-border) !important;
+            box-shadow: none !important; /* remove any glow */
+        }
+
+            /* Remove color change on focus */
+            .form-control:focus,
+            .form-select:focus,
+            input:focus,
+            textarea:focus,
+            select:focus {
+                background-color: var(--input-bg) !important;
+                color: var(--input-text) !important;
+                border-color: var(--input-border) !important;
+                box-shadow: none !important;
+                outline: none !important;
+            }
+
+        /* Placeholder color for dark backgrounds */
+        ::placeholder {
+            color: #c7cbd6;
+            opacity: 1;
+        }
+
+        /* Remove focus ring and keep neutral border */
+        .form-select:focus {
+            border-color: var(--input-border) !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+
+        /* Autofill background fix for Chromium browsers */
+        input:-webkit-autofill,
+        textarea:-webkit-autofill,
+        select:-webkit-autofill {
+            -webkit-text-fill-color: var(--input-text) !important;
+            transition: background-color 99999s ease-in-out 0s; /* prevent flash */
+            box-shadow: 0 0 0px 1000px var(--input-bg) inset !important; /* repaint */
+        }
+
+            /* On focus + autofill also keep same */
+            input:-webkit-autofill:focus,
+            textarea:-webkit-autofill:focus,
+            select:-webkit-autofill:focus {
+                -webkit-text-fill-color: var(--input-text) !important;
+                box-shadow: 0 0 0px 1000px var(--input-bg) inset !important;
+            }
+
+
+        .is-valid,
+        .is-invalid,
+        .was-validated .form-control:valid,
+        .was-validated .form-control:invalid,
+        .was-validated .form-select:valid,
+        .was-validated .form-select:invalid {
+            background-color: var(--input-bg) !important;
+            border-color: var(--input-border) !important;
+            box-shadow: none !important;
+        }
+
+
+
+    </style>
+
+
+    <div class="page-center">
+        <div class="reg-card">
+
+            <h3 class="reg-title">Create Your StayEase Account</h3>
+
+
+            @if (TempData["success"] != null)
+            {
+                <div class="alert alert-success">@TempData["success"]</div>
+            }
+            @if (TempData["error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["error"]</div>
+            }
+
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+            {
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Full Name</label>
+                        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", required = "required" })
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email</label>
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email", required = "required" })
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Gender</label>
+                        @Html.DropDownListFor(m => m.Gender,
+                            new SelectList(new[] { "Male", "Female", "Other" }),
+                            "Select Gender",
+                            new { @class = "form-control", required = "required" })
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Phone Number</label>
+                        @Html.TextBoxFor(m => m.PhoneNo, new { @class = "form-control", required = "required" })
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Address</label>
+                        @Html.TextAreaFor(m => m.Address, new { @class = "form-control", rows = "2" , Column = "4", required = "required" })
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">ID Proof Type</label>
+                        @Html.DropDownListFor(m => m.IDProofType,
+                            new SelectList(new[] { "Aadhar", "Driving Licence" }),
+                            "Select ID Proof",
+                            new { @class = "form-control", required = "required" })
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">ID Proof Number</label>
+                        @Html.TextBoxFor(m => m.IDProofNumber, new { @class = "form-control", required = "required" })
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Occupation</label>
+                        @Html.DropDownListFor(m => m.Occupation,
+                            new SelectList(new[] { "Student", "Working Professional" }),
+                            "Select Occupation",
+                            new { @class = "form-control", required = "required" })
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Role</label>
+                        @Html.DropDownListFor(m => m.Role,
+                            new SelectList(new[] { "User", "Admin" }),
+                            "Select Role",
+                            new { @class = "form-control", required = "required" })
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Password</label>
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", required = "required" })
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Confirm Password</label>
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", required = "required" })
+                    </div>
+
+                </div>
+
+                <button type="submit" class="btn-register">Register</button>
+
+                <a href="/Account/Login" class="login-link">Already have an account? Login</a>
+
+                <script>
+                    function openLoginFromRegister() {
+                        window.location.href = '/Home/Index?openLogin=true';
+                    }
+                </script>
+            }
+
+        </div>
+    </div>*@
+
+
+
+
+
+
+
+@model StayEasePG.Models.UserModel
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+    body {
+        background: linear-gradient(135deg, #071028, #0b1c3f);
+        color: white;
+    }
+
+    .page-center {
+        min-height: 90vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .reg-card {
+        background: rgba(255, 255, 255, 0.06);
+        padding: 35px;
+        width: 650px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 20px rgba(0,0,0,0.45);
+        transition: 0.25s ease;
+    }
+
+        .reg-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 0 22px rgba(245, 210, 106, 0.35);
+            border-color: #f5d26a;
+        }
+
+    .reg-title {
+        text-align: center;
+        color: #f5d26a;
+        font-size: 30px;
+        font-weight: 700;
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        color: #f5d26a;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .form-control, select {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: white !important;
+        border-radius: 10px;
+        padding: 10px;
+        height: 45px;
+    }
+
+        .form-control:focus {
+            border-color: #f5d26a;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 8px rgba(245, 210, 106, 0.5);
+        }
+
+    .btn-register {
+        background: #f5d26a;
+        color: #071028;
+        border: none;
+        padding: 12px;
+        width: 100%;
+        font-weight: 700;
+        border-radius: 10px;
+        margin-top: 15px;
+        transition: .25s;
+    }
+
+        .btn-register:hover {
+            background: #ffe8a4;
+            box-shadow: 0 0 12px rgba(245, 210, 106, 0.6);
+        }
+
+    .login-link {
+        text-align: center;
+        display: block;
+        margin-top: 15px;
+        color: #f5d26a;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .login-link:hover {
+            color: black;
+            text-decoration: underline;
+        }
+
+    /* Your base colors (adjust as you prefer) */
+    :root {
+        --input-bg: #2b3b55; /* dark input background */
+        --input-text: #ffffff; /* text color */
+        --input-border: #3c4a67; /* neutral border */
+    }
+
+
+     /* All text inputs, email, number, password, textarea, select */
+        .form-control,
+        .form-select,
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="password"],
+        textarea,
+        select {
+            background-color: var(--input-bg) !important;
+            color: var(--input-text) !important;
+            border: 1px solid var(--input-border) !important;
+            box-shadow: none !important; /* remove any glow */
+        }
+
+            /* Remove color change on focus */
+            .form-control:focus,
+            .form-select:focus,
+            input:focus,
+            textarea:focus,
+            select:focus {
+                background-color: var(--input-bg) !important;
+                color: var(--input-text) !important;
+                border-color: var(--input-border) !important;
+                box-shadow: none !important;
+                outline: none !important;
+            }
+
+        /* Placeholder color for dark backgrounds */
+        ::placeholder {
+            color: #c7cbd6;
+            opacity: 1;
+        }
+
+        /* Remove focus ring and keep neutral border */
+        .form-select:focus {
+            border-color: var(--input-border) !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+
+        /* Autofill background fix for Chromium browsers */
+        input:-webkit-autofill,
+        textarea:-webkit-autofill,
+        select:-webkit-autofill {
+            -webkit-text-fill-color: var(--input-text) !important;
+            transition: background-color 99999s ease-in-out 0s; /* prevent flash */
+            box-shadow: 0 0 0px 1000px var(--input-bg) inset !important; /* repaint */
+        }
+
+            /* On focus + autofill also keep same */
+            input:-webkit-autofill:focus,
+            textarea:-webkit-autofill:focus,
+            select:-webkit-autofill:focus {
+                -webkit-text-fill-color: var(--input-text) !important;
+                box-shadow: 0 0 0px 1000px var(--input-bg) inset !important;
+            }
+
+
+        .is-valid,
+        .is-invalid,
+        .was-validated .form-control:valid,
+        .was-validated .form-control:invalid,
+        .was-validated .form-select:valid,
+        .was-validated .form-select:invalid {
+            background-color: var(--input-bg) !important;
+            border-color: var(--input-border) !important;
+            box-shadow: none !important;
+        }
+
+
+</style>
+<div class="page-center">
+    <div class="reg-card">
+        <h3 class="reg-title">Create Your StayEase Account</h3>
+        @if (TempData["success"] != null)
+        {
+            <div class="alert alert-success">@TempData["success"]</div>
+        }
+        @if (TempData["error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["error"]</div>
+        }
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+        {   
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Full Name</label>
+                    @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", required = "required" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Email</label>
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email", required = "required" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Gender</label>
+                    @Html.DropDownListFor(m => m.Gender,
+                        new SelectList(new[] { "Male", "Female", "Others" }),
+                        "Select Gender",
+                        new { @class = "form-control", required = "required" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Phone Number</label>
+                    @Html.TextBoxFor(m => m.PhoneNo, new { @class = "form-control", required = "required" })
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Address</label>
+                    @Html.TextAreaFor(m => m.Address, new { @class = "form-control",rows = "3", column = "3",  required = "required" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">ID Proof Type</label>
+                    @Html.DropDownListFor(m => m.IDProofType,
+                        new SelectList(new[] { "Aadhar", "PAN", "Voter ID" }),
+                        "Select ID Proof",
+                        new { @class = "form-control", required = "required" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">ID Proof Number</label>
+                    @Html.TextBoxFor(m => m.IDProofNumber, new { @class = "form-control", required = "required" })
+                </div>
+                @*<div class="col-md-6 mb-3">
+                    <label class="form-label">Occupation</label>
+                    @Html.TextBoxFor(m => m.Occupation, new { @class = "form-control", required = "required" })
+                </div>*@
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Occupation</label>
+                    @Html.DropDownListFor(m => m.Occupation,
+                        new SelectList(new[] { "Student", "Working Professional" }),
+                        "Select Occupation",
+                        new { @class = "form-control", required = "required" })
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Role</label>
+                    @Html.DropDownListFor(m => m.Role,
+                        new SelectList(new[] { "User", "Admin" }),
+                        "Select Role",
+                        new { @class = "form-control", required = "required" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Password</label>
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", required = "required" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Confirm Password</label>
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", required = "required" })
+                </div>
+            </div>
+
+            <button type="submit" class="btn-register">Register</button>
+
+            <a href="/Account/Login" class="login-link">Already have an account? Login</a>
+        }
+    </div>
+</div>
+
+
+
+
+
+
+
+

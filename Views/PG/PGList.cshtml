@@ -1,0 +1,215 @@
+﻿@model System.Data.DataTable
+@{
+    ViewBag.Title = "PG List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+    /* -------------------------------------------------------------------------- */
+    /* THEME VARIABLES (Consistent with previous pages)                             */
+    /* -------------------------------------------------------------------------- */
+    :root {
+        --bg: #0f1215;
+        --panel: #1d2227;
+        --text: #e9eef2;
+        --sub: #a9b0b6;
+        --accent: #ffce4c; /* Gold Accent */
+        --accent2: #c9a34f;
+        --border-color: rgba(255, 206, 76, 0.1);
+        --primary: #ffce4c; /* Gold for Add PG button */
+        --secondary: #343a40; /* Dark for Back button */
+        --warning: #f0ad4e; /* Yellow/Orange for Edit button */
+        --danger: #e74c3c; /* Red for Delete button */
+        --radius: 8px;
+        font-family: 'Inter', sans-serif;
+    }
+    /* Page Header and Back Button */
+    h2 {
+        font-size: 34px;
+        font-weight: 800;
+        color: var(--accent);
+        margin: 30px 0 20px 0;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    /* Standard Button Styling */
+    .btn-custom {
+        padding: 8px 15px;
+        border-radius: 999px; /* Pill shape */
+        font-weight: 600;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+    }
+    /* Back Button (Secondary/Muted) */
+    .btn-secondary {
+        background-color: var(--secondary);
+        color: var(--text);
+    }
+
+        .btn-secondary:hover {
+            background-color: #495057;
+            color: var(--text);
+        }
+    /* Add PG Button (Primary/Gold) */
+    .btn-primary {
+        background: linear-gradient(180deg, var(--primary), var(--accent2));
+        color: var(--bg) !important;
+        box-shadow: 0 4px 8px rgba(255, 206, 76, 0.2);
+    }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            box-shadow: 0 5px 10px rgba(255, 206, 76, 0.4);
+        }
+    /* -------------------------------------------------------------------------- */
+    /* TABLE STYLING */
+    /* -------------------------------------------------------------------------- */
+    .table-responsive-container {
+        /* Wrapper to handle potential horizontal scrolling for wide tables */
+        overflow-x: auto;
+        margin-bottom: 30px;
+    }
+
+    .table-bordered {
+        min-width: 1000px; /* Ensures the table is wide enough for all columns */
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 20px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        overflow: hidden;
+        background-color: var(--panel);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+        .table-bordered th,
+        .table-bordered td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(255, 255, 255, 0.03);
+            color: var(--text);
+            font-size: 13px;
+            vertical-align: top; /* Align content to the top */
+        }
+        /* Table Header */
+        .table-bordered thead tr {
+            background-color: #171a21; /* Slightly darker header */
+        }
+
+        .table-bordered th {
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            white-space: nowrap; /* Prevent header text from wrapping */
+        }
+        /* Table Body */
+        .table-bordered tbody tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.05); /* Subtle striping */
+        }
+
+        .table-bordered tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+    /* Action Buttons within Table */
+    .btn-sm {
+        padding: 4px 8px;
+        font-size: 12px;
+        margin-right: 8px; /* <-- ADDED SPACING HERE */
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        white-space: nowrap; /* Prevent button text from wrapping */
+    }
+
+    .btn-warning {
+        background-color: var(--warning);
+        color: #333; /* Dark text on bright button */
+    }
+
+    .btn-danger {
+        background-color: var(--danger);
+        color: var(--text);
+    }
+
+        .btn-warning:hover, .btn-danger:hover {
+            opacity: 0.9;
+        }
+    /* Column Width Optimization for content */
+    .table-bordered th:nth-child(1), .table-bordered td:nth-child(1) {
+        width: 5%;
+    }
+    /* PGID */
+    .table-bordered th:nth-child(6), .table-bordered td:nth-child(6) {
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    /* Description */
+    .table-bordered th:last-child, .table-bordered td:last-child {
+        width: 120px;
+    }
+    /* Actions */
+</style>
+<div class="pg-list-container">
+    <h2 style="display:flex; justify-content:space-between; align-items:center;">
+        PG List
+        <a href="@Url.Action("Dashboard","Admin")" class="btn-custom btn-secondary">
+            ← Back
+        </a>
+    </h2>
+    <a href="@Url.Action("AddPG","PG")" class="btn-custom btn-primary" style="float:right;margin-bottom:15px;">
+        + Add PG
+    </a>
+    <div style="clear:both;"></div> @* Clear the float before the table *@
+    <div class="table-responsive-container">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>PGID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>PG Type</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>PinCode</th>
+                    <th>Landmark</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (System.Data.DataRow row in Model.Rows)
+                {
+                    <tr>
+                        <td>@row["PGID"]</td>
+                        <td>@row["PGName"]</td>
+                        <td>@row["Email"]</td>
+                        <td>@row["PGType"]</td>
+                        <td>@row["PGCategory"]</td>
+                        <td>@row["Description"]</td>
+                        <td>@row["Address"]</td>
+                        <td>@row["City"]</td>
+                        <td>@row["State"]</td>
+                        <td>@row["PinCode"]</td>
+                        <td>@row["Landmark"]</td>
+                        <td>
+                            <a href="@Url.Action("EditPG","PG", new { id=row["PGID"]})" class="btn-sm btn-warning">Edit</a>
+                            <a href="@Url.Action("DeletePG","PG", new { id=row["PGID"]})" class="btn-sm btn-danger"
+                               onclick="return confirm('Are you sure you want to delete this PG? This action cannot be undone.');">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,174 @@
+﻿@model List<StayEasePG.Models.UserAccountModel>
+@{
+    ViewBag.Title = "Current Staying People";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+    /* -------------------------------------------------------------------------- */
+    /* THEME VARIABLES (Consistent with previous pages)                             */
+    /* -------------------------------------------------------------------------- */
+    :root {
+        --bg: #0f1215;
+        --panel: #1d2227;
+        --text: #e9eef2;
+        --sub: #a9b0b6;
+        --accent: #ffce4c; /* Gold Accent */
+        --accent2: #c9a34f;
+        --border-color: rgba(255, 206, 76, 0.1);
+        --secondary: #343a40; /* Dark for Back button */
+        --success: #28a745; /* Green for Status (e.g., CheckedIn/Active) */
+        --danger: #e74c3c; /* Red for No Users message */
+        --radius: 8px;
+        font-family: 'Inter', sans-serif;
+    }
+    /* Page Header and Back Button */
+    h2 {
+        font-size: 34px;
+        font-weight: 800;
+        color: var(--accent);
+        margin: 30px 0 20px 0;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    /* Standard Button Styling */
+    .btn-custom {
+        padding: 8px 15px;
+        border-radius: 999px; /* Pill shape */
+        font-weight: 600;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+        display: inline-block;
+    }
+    /* Back Button (Secondary/Muted) */
+    .btn-secondary {
+        background-color: var(--secondary);
+        color: var(--text);
+    }
+
+        .btn-secondary:hover {
+            background-color: #495057;
+            color: var(--text);
+        }
+    /* -------------------------------------------------------------------------- */
+    /* TABLE STYLING */
+    /* -------------------------------------------------------------------------- */
+    .table-responsive-container {
+        overflow-x: auto;
+        margin-bottom: 30px;
+    }
+
+    .table-bordered {
+        min-width: 1200px; /* Ensure wide enough for all columns */
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 15px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        overflow: hidden;
+        background-color: var(--panel);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+        .table-bordered th,
+        .table-bordered td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            font-size: 13px;
+            vertical-align: middle;
+        }
+        /* Table Header */
+        .table-bordered thead tr {
+            background-color: #171a21;
+        }
+
+        .table-bordered th {
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        /* Table Body */
+        .table-bordered tbody tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .table-bordered tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+    /* Status Styling */
+    .text-success {
+        color: var(--success) !important;
+        font-weight: 600;
+    }
+
+    .text-danger {
+        color: var(--danger) !important;
+        font-weight: 600;
+        padding: 15px;
+        background-color: rgba(231, 76, 60, 0.1);
+        border: 1px solid var(--danger);
+        border-radius: var(--radius);
+        margin-top: 20px;
+        display: inline-block;
+    }
+    /* Column specific styling for better alignment */
+    .table-bordered td:nth-child(8), /* Amount */
+    .table-bordered th:nth-child(8) {
+        text-align: right;
+    }
+</style>
+<div class="current-staying-list-container">
+    <h2 style="display:flex; justify-content:space-between; align-items:center;">
+        Current Staying People
+        <a href="@Url.Action("Dashboard","Admin")" class="btn-custom btn-secondary">
+            ← Back
+        </a>
+    </h2>
+    <div class="table-responsive-container">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>ID Proof</th>
+                    <th>Address</th>
+                    <th>Room Type</th>
+                    <th>Booking Type</th>
+                    <th style="text-align: right;">Amount (₹)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.UserName</td>
+                        <td>@item.Email</td>
+                        <td>@item.Phone</td>
+                        <td>@item.IDProof</td>
+                        <td>@item.Address</td>
+                        <td>@item.RoomType</td>
+                        <td>@item.BookingType</td>
+                        <td style="text-align: right;">₹@item.Amount</td>
+                        <td class="text-success">@item.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (Model.Count == 0)
+    {
+        <p class="text-danger">No users currently staying.</p>
+    }
+</div>

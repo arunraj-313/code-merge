@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Complete Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center mt-3">Complete Your Registration</h2>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            @if (TempData["error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["error"]</div>
+            }
+
+            <form method="post" action="/Account/CompleteRegister">
+
+                <input type="hidden" name="Email" value="@ViewBag.Email" />
+                <input type="hidden" name="FullName" value="@ViewBag.FullName" />
+                <input type="hidden" name="PhoneNo" value="@ViewBag.PhoneNo" />
+                <input type="hidden" name="Gender" value="@ViewBag.Gender" />
+                <input type="hidden" name="Address" value="@ViewBag.Address" />
+                <input type="hidden" name="IDProofType" value="@ViewBag.IDProofType" />
+                <input type="hidden" name="IDProofNumber" value="@ViewBag.IDProofNumber" />
+                <input type="hidden" name="Occupation" value="@ViewBag.Occupation" />
+                <input type="hidden" name="Password" value="@ViewBag.Password" />
+                <input type="hidden" name="Role" value="User" />
+
+                <div class="alert alert-info">
+                    OTP verified successfully. Click "Finish" to complete registration.
+                </div>
+
+                <button class="btn btn-primary w-100 mt-3">Finish Registration</button>
+
+            </form>
+
+        </div>
+    </div>
+</div>

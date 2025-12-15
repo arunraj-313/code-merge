@@ -1,0 +1,500 @@
+﻿@{
+    ViewBag.Title = "About";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Discover Safe & Affordable PGs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+
+        /* -------------------------------------------------------------------------- */
+        /* THEME VARIABLES (Consistent with Booking Pages but using your specific names) */
+        /* -------------------------------------------------------------------------- */
+        :root {
+            --bg: #0f1215; /* page bg (very dark) */
+            --panel: #1d2227; /* panel background (like card-bg) */
+            --muted: #2b3136; /* muted sections */
+            --text: #e9eef2; /* main text (off-white) */
+            --subtext: #a9b0b6; /* muted text */
+            --accent: #ffce4c; /* warm gold accent (Adjusted to match previous pages' accent color) */
+            --accent-2: #c9a34f; /* slightly darker gold for gradient base */
+            --card-border: rgba(255, 206, 76, 0.1); /* lightened border for visibility */
+            --radius: 12px;
+            --fw-regular: 400;
+            --fw-medium: 600;
+            --fw-bold: 700;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        /* Reset & base */
+        * {
+            box-sizing: border-box
+        }
+
+        html, body {
+            height: 100%
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--bg), #0b0d0f 70%);
+            color: var(--text);
+            /* Prevent content from hiding behind the fixed navbar */
+            padding-top: 70px;
+            min-height: 100vh;
+        }
+
+
+        .container {
+            /* Standard container width */
+            width: 1100px;
+            max-width: calc(100% - 50px);
+            margin: 0 auto;
+        }
+        /* HEADINGS */
+        h1, h2, h3, h4 {
+            font-weight: var(--fw-bold);
+            color: var(--text);
+        }
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px 16px;
+            border-radius: 999px; /* Pill shape */
+            text-decoration: none;
+            font-weight: var(--fw-medium);
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            /* Using consistent accent color */
+            background: linear-gradient(180deg, var(--accent), var(--accent-2));
+            color: var(--bg); /* Dark text on bright background */
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            box-shadow: 0 6px 18px rgba(12, 10, 8, 0.18);
+        }
+
+            .btn-primary:hover {
+                box-shadow: 0 8px 20px rgba(12, 10, 8, 0.3);
+                opacity: 0.9;
+            }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--card-border);
+        }
+
+            .btn-outline:hover {
+                background: rgba(255, 255, 255, 0.05);
+                border-color: var(--accent);
+                color: var(--accent);
+            }
+
+        .btn.large {
+            padding: 14px 22px;
+            font-size: 15px;
+        }
+        /* HERO */
+        .hero {
+            padding: 44px 0;
+        }
+
+        .hero-grid {
+            display: flex;
+            gap: 36px;
+            align-items: center;
+        }
+
+        .hero-left {
+            flex: 1;
+            max-width: 720px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            background: rgba(255, 206, 76, 0.08); /* Use lightened accent for background */
+            color: var(--accent);
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-weight: var(--fw-medium);
+            font-size: 13px;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+        }
+
+        .hero-left h1 {
+            font-size: 40px;
+            margin: 6px 0 14px 0;
+            letter-spacing: -0.2px;
+            line-height: 1.06;
+        }
+
+        .lead {
+            color: var(--subtext);
+            max-width: 680px;
+            margin-bottom: 25px; /* Increased margin for spacing */
+            font-size: 17px; /* Slightly larger lead text */
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        /* photo card */
+        .hero-right {
+            width: 360px;
+            min-width: 300px; /* Ensure it doesn't shrink too small */
+        }
+
+        .card-photo {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.00));
+            border-radius: 16px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.02);
+        }
+
+            .card-photo img {
+                display: block;
+                width: 100%;
+                height: 240px;
+                object-fit: cover;
+                border-radius: 10px;
+            }
+        /* FEATURES small icon row */
+        .features {
+            padding-top: 14px;
+            padding-bottom: 14px;
+            margin-top: 20px;
+        }
+
+        .section-sub {
+            text-align: center;
+            color: var(--accent); /* Subheadings use accent color */
+            font-size: 24px; /* Larger subtitle */
+            margin: 6px 0 24px; /* Adjusted spacing */
+            font-weight: var(--fw-bold);
+        }
+
+        .feature-row {
+            display: flex;
+            gap: 18px;
+            justify-content: space-between;
+            align-items: stretch;
+        }
+
+        .feature {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.012), rgba(255, 255, 255, 0.006));
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+            border: 1px solid var(--card-border);
+            flex: 1;
+        }
+
+        .feature-icon {
+            background: rgba(255, 255, 255, 0.02);
+            width: 56px;
+            height: 56px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 20px;
+            color: var(--accent);
+        }
+
+        .feature h4 {
+            margin: 6px 0;
+            font-size: 18px;
+            font-weight: var(--fw-bold);
+        }
+
+        .feature p {
+            color: var(--subtext);
+            font-size: 13px;
+            margin: 0;
+        }
+        /* STATS (using same card styles for consistency) */
+        .stats {
+            padding-top: 24px;
+            padding-bottom: 24px;
+        }
+
+        .stat-grid {
+            display: flex;
+            gap: 18px;
+            justify-content: space-between;
+        }
+
+        .stat-card {
+            flex: 1;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.003));
+            border-radius: 12px;
+            padding: 22px;
+            text-align: center;
+            border: 1px solid var(--card-border);
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .stat-label {
+            color: var(--subtext);
+            font-size: 13px;
+        }
+        /* JOURNEY */
+        .journey {
+            margin-top: 40px;
+            background: linear-gradient(180deg, var(--panel), #17191b);
+            border-radius: 14px;
+            padding: 35px; /* Increased padding */
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+            .journey h2 {
+                margin: 0 0 12px 0;
+                font-size: 28px; /* Larger title */
+                color: var(--accent);
+            }
+
+        .journey-text {
+            color: var(--subtext);
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .journey-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+            .journey-list li {
+                background: rgba(255, 255, 255, 0.02);
+                padding: 10px 12px;
+                border-radius: 10px;
+                border: 1px solid rgba(255, 255, 255, 0.02);
+                color: var(--text);
+                font-size: 14px;
+                font-weight: var(--fw-medium);
+            }
+        /* BIG FEATURES */
+        .big-feat {
+            margin-top: 40px;
+            padding-bottom: 60px;
+        }
+
+        .big-rows {
+            display: flex;
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .big-card {
+            flex: 1;
+            background: var(--panel); /* Use panel color as background */
+            border-radius: 14px;
+            padding: 28px; /* Increased padding */
+            border: 1px solid rgba(255, 206, 76, 0.1);
+            text-align: left;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .big-card-icon {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: rgba(255, 206, 76, 0.08); /* Lightened accent background */
+            color: var(--accent);
+            font-size: 24px; /* Larger icon */
+            margin-bottom: 12px;
+        }
+
+        .big-card h4 {
+            margin: 0 0 8px 0;
+            font-size: 20px; /* Larger heading */
+            font-weight: var(--fw-bold);
+        }
+
+        .big-card p {
+            color: var(--subtext);
+            margin: 0;
+        }
+        /* FOOTER */
+        .site-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+            padding: 18px 0;
+            margin-top: 36px;
+            color: var(--subtext);
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .footer-links a {
+            margin-left: 15px;
+            text-decoration: none;
+            color: var(--subtext);
+        }
+
+            .footer-links a:hover {
+                color: var(--accent);
+            }
+        /* Utility */
+        .text-muted {
+            color: var(--subtext);
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        a {
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <section class="hero">
+            <div class="container hero-grid">
+                <div class="hero-left">
+                    <p class="eyebrow">PGs & Boarding</p>
+                    <h1>Discover Safe & Affordable PGs</h1>
+                    <p class="lead">Reliable listings across top cities with monitored room details. Verified hosts and transparent pricing, making your search stress-free.</p>
+                    <div class="hero-ctas">
+                        <a class="btn btn-primary large" href="@Url.Action("Index", "PGMaster")">Find PG/Room</a>
+                        <a class="btn btn-outline large" href="@Url.Action("Index", "PGMaster")">Search Now</a>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <div class="card-photo">
+                        <img src="https://th.bing.com/th/id/OIP.JJwDKBOLQZW6Dbqs6bc-iAHaEL?w=321&h=181&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1" alt="A clean, verified PG room photo">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="features container">
+            <h3 class="section-sub">What Sets Us Apart</h3>
+            <div class="feature-row">
+                <div class="feature">
+                    <div class="feature-icon">🏠</div>
+                    <h4>500+</h4>
+                    <p>Verified properties</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📍</div>
+                    <h4>10K+</h4>
+                    <p>Residents served</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💖</div>
+                    <h4>User-Centric</h4>
+                    <p>Easy booking & support</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔐</div>
+                    <h4>10+</h4>
+                    <p>Security checks</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⭐</div>
+                    <h4>4.8</h4>
+                    <p>Average rating</p>
+                </div>
+            </div>
+        </section>
+        <section class="stats container">
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Rooms listed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10K+</div>
+                    <div class="stat-label">Residents</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Simple Process</div>
+                    <div class="stat-label">Fast booking & move-in</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10+</div>
+                    <div class="stat-label">Cities</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4.8</div>
+                    <div class="stat-label">Avg rating</div>
+                </div>
+            </div>
+        </section>
+        <section class="journey container">
+            <h2>Our Journey to Better Living</h2>
+            <p class="journey-text">
+                We started with a simple mission: make secure, well-managed PG stays accessible and affordable. Through careful verification and a people-first approach, we've built a community of hosts and residents who trust each other. We aim to be the most reliable platform for long-term and short-term boarding needs.
+            </p>
+            <ul class="journey-list">
+                <li>Verified listings with regular checks</li>
+                <li>User-centric booking steps and support</li>
+                <li>Transparent pricing, no hidden fees</li>
+                <li>Community focused features and reviews</li>
+            </ul>
+        </section>
+        <section class="big-feat container">
+            <h3 class="section-sub">Why StayEase?</h3>
+            <div class="big-rows">
+                <div class="big-card">
+                    <div class="big-card-icon">🔎</div>
+                    <h4>Verified Listings</h4>
+                    <p>Each listing is checked by our team for safety, accuracy, and amenities before being published.</p>
+                </div>
+                <div class="big-card">
+                    <div class="big-card-icon">🫶</div>
+                    <h4>User-Centric Booking</h4>
+                    <p>We keep the booking flow simple and helpful, allowing you to secure your room in minutes.</p>
+                </div>
+                <div class="big-card">
+                    <div class="big-card-icon">👥</div>
+                    <h4>Community Focused</h4>
+                    <p>Benefit from community-led reviews and neighborhood insights to find the perfect spot.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>© <span id="year"></span> StayEase</div>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="@Url.Action("Contact", "Home")">Contact</a>
+            </div>
+        </div>
+    </footer>
+    <script>document.getElementById('year').innerText = new Date().getFullYear();</script>
+</body>
+</html>

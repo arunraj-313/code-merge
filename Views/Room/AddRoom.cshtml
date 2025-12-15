@@ -1,0 +1,251 @@
+﻿@model StayEasePG.Models.RoomDetails
+@using System.Web.Mvc.Html
+@{
+    ViewBag.Title = "Add Room";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+    /* -------------------------------------------------------------------------- */
+    /* THEME VARIABLES (Consistent with previous pages)                             */
+    /* -------------------------------------------------------------------------- */
+    :root {
+        --bg: #0f1215; /* page bg (very dark) */
+        --panel: #1d2227; /* Form card background */
+        --text: #e9eef2; /* main text */
+        --sub: #a9b0b6; /* muted text */
+        --accent: #ffce4c; /* Primary Gold Accent */
+        --accent2: #c9a34f;
+        --border-color: rgba(255, 206, 76, 0.1);
+        --input-bg: #0f1215; /* Input field background */
+        --success: #35a350;
+        --radius: 8px;
+        font-family: 'Inter', sans-serif;
+    }
+    /* Form Container and Page Header */
+    .form-container {
+        max-width: 650px;
+        margin: 30px auto;
+        padding: 30px;
+        background: linear-gradient(180deg, var(--panel), #17191b);
+        border-radius: var(--radius);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    h2 {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--accent);
+        margin-top: 0;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+    /* Form Labels and Groups */
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    form label {
+        color: var(--text);
+        font-size: 14px;
+        margin-top: 5px;
+        margin-bottom: 6px;
+        display: block;
+        font-weight: 600;
+    }
+    /* Input, Select, Textarea common styling */
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        background: var(--input-bg);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text);
+        border-radius: 8px;
+        font-size: 14px;
+        box-sizing: border-box;
+        transition: border-color 0.2s;
+        min-height: 40px;
+    }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 206, 76, 0.2);
+        }
+    /* Dropdown Specifics */
+    select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a9b0b6'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding-right: 30px;
+    }
+
+    .form-control option {
+        background-color: var(--input-bg);
+        color: var(--text);
+    }
+
+    .text-danger {
+        color: var(--danger);
+        font-size: 13px;
+        margin-top: 4px;
+        display: block;
+    }
+    /* Amenities Checkbox Styling */
+    .form-check-inline {
+        display: inline-block;
+        margin-right: 20px;
+        margin-top: 10px;
+    }
+
+    .form-check-input {
+        width: 18px;
+        height: 18px;
+        margin-right: 5px;
+        appearance: none;
+        border: 2px solid var(--sub);
+        border-radius: 4px;
+        background-color: var(--input-bg);
+        vertical-align: middle;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .form-check-input:checked {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
+
+            .form-check-input:checked::after {
+                content: '\2713'; /* Checkmark symbol */
+                color: var(--text);
+                font-size: 14px;
+                display: block;
+                text-align: center;
+                line-height: 16px;
+            }
+
+    .form-check-label {
+        font-weight: 400 !important;
+        color: var(--sub) !important;
+        display: inline !important;
+        vertical-align: middle;
+        cursor: pointer;
+    }
+    /* Submit Button */
+    .btn-success {
+        display: block;
+        width: 150px;
+        padding: 12px;
+        margin-top: 25px;
+        border: none;
+        border-radius: 999px;
+        background-color: var(--success);
+        color: var(--text);
+        font-weight: 700;
+        font-size: 15px;
+        cursor: pointer;
+        transition: background-color 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 10px rgba(53, 163, 80, 0.3);
+    }
+
+        .btn-success:hover {
+            background-color: #2e8b45;
+            box-shadow: 0 6px 12px rgba(53, 163, 80, 0.5);
+        }
+</style>
+<div class="form-container">
+    <h2>Add Room Details</h2>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label for="PGID">Select PG Name and Location</label>
+            @Html.DropDownListFor(
+                m => m.PGID,
+                Model.PGOptions,
+                "--- Select a PG ---",
+                new { @class = "form-control", required = "required" }
+            )
+            @Html.ValidationMessageFor(m => m.PGID, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            <label for="RoomType">Room Type (Sharing)</label>
+            @Html.DropDownListFor(
+                m => m.RoomType,
+                Model.RoomTypeOptions,
+                "--- Select Sharing Type ---",
+                new { @class = "form-control", required = "required" }
+            )
+            @Html.ValidationMessageFor(m => m.RoomType, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-row" style="display: flex; gap: 20px;">
+            <div class="form-group" style="flex: 1;">
+                <label for="TotalRooms">Total Rooms</label>
+                @Html.TextBoxFor(m => m.TotalRooms, new { @class = "form-control", type = "number", required = "required" })
+                @Html.ValidationMessageFor(m => m.TotalRooms, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label for="AvailableRooms">Available Rooms</label>
+                @Html.TextBoxFor(m => m.AvailableRooms, new { @class = "form-control", type = "number", required = "required" })
+                @Html.ValidationMessageFor(m => m.AvailableRooms, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-row" style="display: flex; gap: 20px;">
+            <div class="form-group" style="flex: 1;">
+                <label for="PricePerDay">Price per Day</label>
+                @Html.TextBoxFor(m => m.PricePerDay, new { @class = "form-control", type = "number", step = "0.01", required = "required", placeholder = "0.00" })
+                @Html.ValidationMessageFor(m => m.PricePerDay, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label for="PricePerWeek">Price per Week</label>
+                @Html.TextBoxFor(m => m.PricePerWeek, new { @class = "form-control", type = "number", step = "0.01", required = "required", placeholder = "0.00" })
+                @Html.ValidationMessageFor(m => m.PricePerWeek, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label for="PricePerMonth">Price per Month</label>
+                @Html.TextBoxFor(m => m.PricePerMonth, new { @class = "form-control", type = "number", step = "0.01", required = "required", placeholder = "0.00" })
+                @Html.ValidationMessageFor(m => m.PricePerMonth, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-row" style="display: flex; gap: 20px;">
+            <div class="form-group" style="flex: 1;">
+                <label for="MaintenanceCharges">Maintenance Charges</label>
+                @Html.TextBoxFor(m => m.MaintenanceCharges, new { @class = "form-control", type = "number", step = "0.01", placeholder = "0.00" })
+                @Html.ValidationMessageFor(m => m.MaintenanceCharges, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label for="AdvanceAmount">Advance Amount</label>
+                @Html.TextBoxFor(m => m.AdvanceAmount, new { @class = "form-control", type = "number", step = "0.01", placeholder = "0.00" })
+                @Html.ValidationMessageFor(m => m.AdvanceAmount, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label for="DepositAmount">Deposit Amount</label>
+                @Html.TextBoxFor(m => m.DepositAmount, new { @class = "form-control", type = "number", step = "0.01", placeholder = "0.00" })
+                @Html.ValidationMessageFor(m => m.DepositAmount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Amenities</label><br />
+            @if (ViewBag.Amenities != null)
+            {
+                <div style="padding: 10px; border: 1px solid var(--border-color); border-radius: var(--radius);">
+                    @foreach (var amenity in (List<StayEasePG.Models.Amenity>)ViewBag.Amenities)
+                    {
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="amenity-@amenity.AmenityID" name="SelectedAmenities" value="@amenity.AmenityID" />
+                            <label class="form-check-label" for="amenity-@amenity.AmenityID">@amenity.AmenityName</label>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <span class="text-danger">No amenities defined.</span>
+            }
+        </div>
+        <button type="submit" class="btn btn-success">Save</button>
+    }
+</div>

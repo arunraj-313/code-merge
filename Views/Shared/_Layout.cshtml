@@ -1,0 +1,473 @@
+﻿@{
+
+    string current = ViewContext.RouteData.Values["Action"].ToString().ToLower();
+
+    string userRole = Session["Role"] as string;
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Stay-Ease</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+
+
+        :root {
+            --royal-1: #071028;
+            --royal-2: #0b1c3f;
+            --gold-1: #cfa23a;
+            --gold-2: #f5d26a;
+            --text: #ffffff;
+        }
+
+
+
+
+        /* NAVBAR */
+        .navbar-custom {
+            padding: 17px;
+            background: linear-gradient(135deg, var(--royal-1), var(--royal-2));
+            border-bottom: 1px solid rgba(207,162,58,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+
+
+        .navbar-brand {
+            color: var(--gold-2) !important;
+            font-weight: 800;
+            font-size: 1.8rem;
+        }
+
+
+
+        .navbar-custom .navbar-nav > li > a {
+            color: var(--gold-1);
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+
+
+            .navbar-custom .navbar-nav > li > a:hover {
+                color: var(--gold-2);
+            }
+
+
+
+        .dashboard-link a {
+            color: #4CAF50 !important;
+            font-weight: 700 !important;
+        }
+
+
+
+            .dashboard-link a:hover {
+                color: #81C784 !important;
+            }
+
+
+
+
+        /* LOGIN BUTTON */
+        .login-btn {
+            background: var(--gold-1);
+            color: #071028;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 700;
+            border: none;
+            transition: 0.3s;
+        }
+
+
+
+            .login-btn:hover {
+                background: white;
+            }
+
+
+
+
+        /* LOGOUT */
+        .logout-btn {
+            background: #e04e4e;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+        }
+
+
+
+            .logout-btn:hover {
+                background: #ff6b6b;
+            }
+
+
+
+        .welcome-text {
+            color: var(--gold-2);
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+
+
+
+        /* POPUP */
+        .modal-content {
+            background: #0c1733;
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(245,210,106,0.4);
+            box-shadow: 0 0 25px rgba(0,0,0,0.6);
+            color: white;
+        }
+
+
+        .popup-title {
+            text-align: center;
+            color: #f5d26a;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+
+        .popup-label {
+            color: #f5d26a;
+            font-weight: 600;
+        }
+
+
+
+        .popup-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: white;
+            margin-bottom: 15px;
+        }
+
+
+
+            .popup-input:focus {
+                border-color: #f5d26a;
+                box-shadow: 0 0 8px rgba(245,210,106,0.5);
+            }
+
+        .modal-content {
+            background: #0c1733 !important;
+            padding: 30px !important;
+            border-radius: 16px !important;
+            border: 1px solid rgba(245,210,106,0.4) !important;
+            box-shadow: 0 0 25px rgba(0,0,0,0.6) !important;
+            color: white !important;
+        }
+
+        /* Title */
+        #loginModal .popup-title {
+            text-align: center;
+            color: #f5d26a !important;
+            font-size: 28px !important;
+            font-weight: 700 !important;
+        }
+
+        /* Labels */
+        #loginModal .popup-label {
+            color: #f5d26a !important;
+            font-weight: 600 !important;
+        }
+
+        /* Inputs */
+        #loginModal .popup-input {
+            width: 100% !important;
+            padding: 12px !important;
+            border-radius: 12px !important;
+            background: rgba(255,255,255,0.08) !important;
+            border: 1px solid rgba(255,255,255,0.15) !important;
+            color: white !important;
+        }
+
+            #loginModal .popup-input:focus {
+                border-color: #f5d26a !important;
+                box-shadow: 0 0 8px rgba(245,210,106,0.5) !important;
+            }
+
+        /* Button */
+        #loginModal .popup-btn {
+            width: 100% !important;
+            background: #f5d26a !important;
+            color: #071028 !important;
+            border: none !important;
+            padding: 12px !important;
+            border-radius: 12px !important;
+            font-weight: 700 !important;
+            margin-top: 10px !important;
+        }
+
+            #loginModal .popup-btn:hover {
+                background: #ffe8a4 !important;
+            }
+
+        /* Links */
+        #loginModal .popup-links a {
+            color: #f5d26a !important;
+            text-decoration: none !important;
+        }
+
+            #loginModal .popup-links a:hover {
+                color: white !important;
+            }
+
+        /* Error Text */
+        #loginModal .text-danger {
+            color: #ff6b6b !important;
+            font-size: 13px !important;
+        }
+
+        /* BACKDROP FIX */
+        .modal-backdrop.show {
+            opacity: 0.9 !important;
+            background: rgba(0,0,0,0.7) !important;
+            backdrop-filter: blur(8px) !important;
+        }
+
+
+
+
+
+        .text-danger {
+            color: #ff6b6b !important;
+        }
+
+
+        .popup-btn {
+            width: 100%;
+            background: #f5d26a;
+            color: #071028;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+
+
+            .popup-btn:hover {
+                background: #ffe8a4;
+            }
+
+
+
+        .popup-links a {
+            color: #f5d26a;
+            text-decoration: none;
+        }
+
+
+
+            .popup-links a:hover {
+                color: white;
+            }
+
+
+
+        .modal-backdrop.show {
+            opacity: 1 !important;
+            backdrop-filter: blur(8px) brightness(0.4);
+        }
+
+        select, option {
+            color: black !important;
+        }
+
+        footer {
+            display: none !important;
+        }
+    </style>
+
+
+    @{
+        string current1 = ViewContext.RouteData.Values["Action"].ToString().ToLower();
+        string currentController = ViewContext.RouteData.Values["Controller"].ToString().ToLower();
+        string userRole1 = Session["Role"] as string;
+    }
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title - Stay-Ease</title>
+
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+    </head>
+
+    <body>
+
+        <!-- NAVBAR -->
+        <div class="navbar navbar-inverse navbar-fixed-top navbar-custom">
+            <div class="container">
+                <div class="navbar-header">
+
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    @Html.ActionLink("Stay-Ease", "Index", "Home", null, new { @class = "navbar-brand" })
+                </div>
+
+                <div class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("About", "About", "Home")</li>
+                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+
+                        @if (userRole == "Admin")
+                        {
+                            <li class="dashboard-link">
+                                @Html.ActionLink("Admin Dashboard", "Dashboard", "Admin")
+                            </li>
+                        }
+                    </ul>
+
+                    <div class="header-buttons navbar-right">
+
+                        @if (Session["FullName"] != null)
+                        {
+                            <span class="welcome-text">Welcome, @Session["FullName"]!</span>
+                            <button class="logout-btn" onclick="window.location.href='@Url.Action("Logout","Account")'">Logout</button>
+                        }
+                        else
+                        {
+                            @* Show Login Button ONLY on Home / About / Contact *@
+                            if (currentController == "home")
+                            {
+                                <button id="openLoginPopupButton" class="login-btn" data-toggle="modal" data-target="#loginModal">Login</button>
+                            }
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="container body-content" style="margin-top:100px;">
+            @RenderBody()
+        </div>
+
+
+        <div class="modal fade" id="loginModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <h2 class="popup-title">Login</h2>
+
+                    <form id="ajaxLoginForm">
+
+                        <div class="form-group">
+                            <label class="popup-label">Email or Username</label>
+                            <input type="text" name="email" class="popup-input" placeholder="Enter your email" />
+                            <span id="emailError" class="text-danger" style="font-size:13px;"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="popup-label">Password</label>
+                            <input type="password" name="password" class="popup-input" placeholder="Enter your password" />
+                            <span id="passwordError" class="text-danger" style="font-size:13px;"></span>
+                        </div>
+
+                        <span id="loginError" class="text-danger" style="font-size:14px; display:block; text-align:center; margin-top:5px;"></span>
+
+                        <button type="submit" class="popup-btn">Login</button>
+
+                        <div class="popup-links text-center mt-3">
+                            <a href="/Account/ForgotPassword">Forgot Password?</a><br />
+                            <a href="/Account/Register">New User? Register Here</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+
+
+        <!-- AJAX LOGIN WITHOUT REFRESH -->
+        <script>
+            $("#ajaxLoginForm").submit(function (e) {
+                e.preventDefault();
+
+                $("#emailError").text("");
+                $("#passwordError").text("");
+                $("#loginError").text("");
+
+                $.ajax({
+                    url: "/Account/AjaxLogin",
+                    type: "POST",
+                    data: {
+                        email: $("input[name='email']").val(),
+                        password: $("input[name='password']").val()
+                    },
+                    success: function (res) {
+
+                        if (!res.success) {
+
+                            if (res.field === "email") {
+                                $("#emailError").text(res.message);
+                            }
+                            else if (res.field === "password") {
+                                $("#passwordError").text(res.message);
+                            }
+                            else {
+                                $("#loginError").text(res.message);
+                            }
+
+                            $("#loginModal").modal("show");
+                            return;
+                        }
+
+                        window.location.href = res.redirect;
+                    }
+                });
+            });
+        </script>
+
+
+        <!-- AUTO OPEN LOGIN (For Register button redirect) -->
+        <script>
+            $(document).ready(function () {
+
+                const urlParam = new URL(window.location.href).searchParams.get("openLogin");
+
+                if (urlParam === "true") {
+                    $("#loginModal").modal("show");
+                }
+
+            });
+        </script>
+
+        @RenderSection("scripts", required: false)
+
+    </body>
+</html>

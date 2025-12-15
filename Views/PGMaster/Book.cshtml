@@ -1,0 +1,82 @@
+﻿@model StayEasePG.Models.BookingModel
+@{
+    ViewBag.Title = "Book Room";
+    // Payment options are now set in the Controller (ViewBag.PaymentOptions)
+    var paymentOptions = ViewBag.PaymentOptions as IEnumerable<SelectListItem>;
+    // Determine the price display text
+    string priceText = "";
+    if (Model.BookingType == "Day") priceText = $"₹{Model.PricePerDay.ToString("N0")}";
+    else if (Model.BookingType == "Week") priceText = $"₹{Model.PricePerWeek.ToString("N0")}";
+    else if (Model.BookingType == "Month") priceText = $"₹{Model.PricePerMonth.ToString("N0")}";
+}
+<style>
+
+    .booking-container {
+        max-width: 600px;
+        margin: 30px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+
+    .header-info h3 {
+        margin-top: 0;
+    }
+
+    .pre-filled-info p {
+        margin-bottom: 5px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .total-amount-display {
+        font-size: 1.5em;
+        color: #007bff;
+    }
+</style>
+<div class="booking-container">
+    <div class="header-info">
+        <h2>Book Room: @Model.RoomType</h2>
+        <p class="text-muted">@Model.PGName - @Model.Location</p>
+    </div>
+    <div class="pre-filled-info alert alert-info">
+        <p><strong>Selected Booking:</strong> @Model.BookingType</p>
+        <p><strong>Price Basis:</strong> @priceText / @Model.BookingType</p>
+    </div>
+    @using (Html.BeginForm("Book", "PGMaster", FormMethod.Post, new { @class = "booking-form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.PGID)
+        @Html.HiddenFor(x => x.RoomID)
+        @Html.HiddenFor(x => x.BookingType)
+        @Html.HiddenFor(x => x.Duration)
+        @Html.HiddenFor(x => x.TotalAmount)
+        @Html.HiddenFor(x => x.BookingStatus)
+        <div class="form-group">
+            <label>Check-in Date</label>
+            @Html.TextBoxFor(x => x.CheckInDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(x => x.CheckInDate, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            <label>Payment Method</label>
+            @Html.DropDownListFor(
+                x => x.PaymentMethod,
+                paymentOptions,
+                "--- Select Payment Method ---",
+                new { @class = "form-control" }
+            )
+            @Html.ValidationMessageFor(x => x.PaymentMethod, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group text-center">
+            <label>Total Payable Amount</label>
+            <div class="total-amount-display">
+                ₹ @Model.TotalAmount.ToString("N0")
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+            Confirm Booking & Proceed
+        </button>
+    }
+</div>
